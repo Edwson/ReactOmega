@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(find:*)",
+      "Bash(zip -r:*)",
+      "Bash(npx serve out -p 3000)",
+      "Bash(curl:*)",
+      "Bash(npx serve . -p 3000)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

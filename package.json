@@ -1,0 +1,21 @@
+{
+    "name": "reactomega-monorepo",
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Edwson/ReactOmega.git"
+    },
+    "bugs": {
+        "url": "https://github.com/Edwson/ReactOmega/issues"
+    },
+    "homepage": "https://github.com/Edwson/ReactOmega#readme",
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "scripts": {
+        "dev": "npm run dev --workspace=apps/docs",
+        "build": "npm run build --workspaces",
+        "lint": "npm run lint --workspaces"
+    }
+}
