@@ -19,7 +19,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@reactomega/ui": ["../../packages/ui/src/index.ts"],
+      "@reactomega/ui/*": ["../../packages/ui/src/*"]
     }
   },
   "include": [
