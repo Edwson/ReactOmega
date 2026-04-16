@@ -1,5 +1,3 @@
 {
-  "buildCommand": "cd ../.. && npm run build --workspace=apps/docs",
-  "outputDirectory": "apps/docs/.next",
   "framework": "nextjs"
 }

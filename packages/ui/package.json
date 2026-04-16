@@ -4,17 +4,17 @@
     "description": "A Next-Gen React Animation Library — premium components and backgrounds",
     "keywords": ["react", "animation", "components", "three.js", "framer-motion", "tailwind"],
     "license": "MIT",
-    "main": "./dist/index.js",
-    "module": "./dist/index.mjs",
-    "types": "./dist/index.d.ts",
+    "main": "./src/index.ts",
+    "module": "./src/index.ts",
+    "types": "./src/index.ts",
     "exports": {
         ".": {
-            "import": "./dist/index.mjs",
-            "require": "./dist/index.js",
-            "types": "./dist/index.d.ts"
+            "import": "./src/index.ts",
+            "require": "./src/index.ts",
+            "types": "./src/index.ts"
         }
     },
-    "files": ["dist"],
+    "files": ["dist", "src"],
     "scripts": {
         "build": "tsup",
         "dev": "tsup --watch",

@@ -1,12 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export',
-  basePath: '/ReactOmega',
+  transpilePackages: ['@reactomega/ui'],
   images: {
     unoptimized: true,
   },
-  trailingSlash: true,
 };
 
 export default nextConfig;
