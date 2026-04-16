@@ -1,21 +1,33 @@
 {
-<<<<<<< HEAD
     "name": "@reactomega/ui",
-    "version": "0.0.1",
-    "main": "./src/index.ts",
-    "types": "./src/index.ts",
+    "version": "0.1.0",
+    "description": "A Next-Gen React Animation Library — premium components and backgrounds",
+    "keywords": ["react", "animation", "components", "three.js", "framer-motion", "tailwind"],
+    "license": "MIT",
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "files": ["dist"],
     "scripts": {
-        "build": "echo 'UI package build complete'",
-        "lint": "eslint .",
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "lint": "eslint . --ext .ts,.tsx",
         "type-check": "tsc --noEmit"
     },
     "peerDependencies": {
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0",
-        "framer-motion": "^11.0.0",
-        "three": "^0.160.0",
-        "@react-three/fiber": "^9.0.0",
-        "@react-three/drei": "^10.0.0"
+        "react": ">=18.0.0",
+        "react-dom": ">=18.0.0",
+        "framer-motion": ">=11.0.0",
+        "three": ">=0.160.0",
+        "@react-three/fiber": ">=9.0.0",
+        "@react-three/drei": ">=10.0.0"
     },
     "dependencies": {
         "clsx": "^2.1.0",
@@ -25,51 +37,8 @@
         "typescript": "^5.3.0",
         "tailwindcss": "^3.4.0",
         "@types/react": "^19.2.0",
-        "@types/three": "^0.160.0"
+        "@types/three": "^0.160.0",
+        "tsup": "^8.0.0",
+        "eslint": "^8.0.0"
     }
 }
-=======
-  "name": "@reactomega/ui",
-  "version": "0.1.0",
-  "description": "A Next-Gen React Animation Library — premium components and backgrounds",
-  "keywords": ["react", "animation", "components", "three.js", "framer-motion", "tailwind"],
-  "license": "MIT",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
-  "files": ["dist"],
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "lint": "eslint . --ext .ts,.tsx",
-    "type-check": "tsc --noEmit"
-  },
-  "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0",
-    "framer-motion": ">=11.0.0",
-    "three": ">=0.160.0",
-    "@react-three/fiber": ">=9.0.0",
-    "@react-three/drei": ">=10.0.0"
-  },
-  "dependencies": {
-    "clsx": "^2.1.0",
-    "tailwind-merge": "^2.2.0"
-  },
-  "devDependencies": {
-    "typescript": "^5.3.0",
-    "tailwindcss": "^3.4.0",
-    "@types/react": "^19.2.0",
-    "@types/three": "^0.160.0",
-    "tsup": "^8.0.0",
-    "eslint": "^8.0.0"
-  }
-}
->>>>>>> 5fdd960 (feat: v0.1.0 — 7 new components, build toolchain, quality improvements, docs site)

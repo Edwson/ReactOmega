@@ -1,10 +1,5 @@
 'use client';
 
-<<<<<<< HEAD
-import { useEffect, useState } from 'react';
-
-export const useMousePosition = () => {
-=======
 import { useEffect, useRef, useState } from 'react';
 
 /**
@@ -31,7 +26,6 @@ export const useMousePosition = () => {
  * Use only when the component must reactively re-render from mouse position.
  */
 export const useMousePositionReactive = () => {
->>>>>>> 5fdd960 (feat: v0.1.0 — 7 new components, build toolchain, quality improvements, docs site)
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
@@ -39,11 +33,7 @@ export const useMousePositionReactive = () => {
             setMousePosition({ x: ev.clientX, y: ev.clientY });
         };
 
-<<<<<<< HEAD
-        window.addEventListener('mousemove', updateMousePosition);
-=======
         window.addEventListener('mousemove', updateMousePosition, { passive: true });
->>>>>>> 5fdd960 (feat: v0.1.0 — 7 new components, build toolchain, quality improvements, docs site)
 
         return () => {
             window.removeEventListener('mousemove', updateMousePosition);

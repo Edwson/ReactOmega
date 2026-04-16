@@ -21,9 +21,6 @@ export * from './CyberGrid';
 export * from './DigitalRain';
 export * from './OrbitalRings';
 export * from './StarTravel';
-<<<<<<< HEAD
-=======
 export * from './BlackHole';
 export * from './Fog';
 export * from './AsteroidField';
->>>>>>> 5fdd960 (feat: v0.1.0 — 7 new components, build toolchain, quality improvements, docs site)

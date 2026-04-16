@@ -1,12 +1,6 @@
 'use client';
 
 import { useRef, useState, memo } from 'react';
-<<<<<<< HEAD
-import { motion } from 'framer-motion';
-import { cn } from '../../utils/cn';
-
-export interface MagneticButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-=======
 import { motion, MotionProps } from 'framer-motion';
 import { cn } from '../../utils/cn';
 
@@ -18,7 +12,6 @@ type NativeButtonProps = Omit<
 >;
 
 export interface MagneticButtonProps extends NativeButtonProps {
->>>>>>> 5fdd960 (feat: v0.1.0 — 7 new components, build toolchain, quality improvements, docs site)
     /**
      * Strength of the magnetic effect
      * @default 0.5
@@ -75,11 +68,7 @@ export const MagneticButton = memo(function MagneticButton({
                 className
             )}
             style={style}
-<<<<<<< HEAD
-            {...props as any}
-=======
             {...props}
->>>>>>> 5fdd960 (feat: v0.1.0 — 7 new components, build toolchain, quality improvements, docs site)
         >
             <span className="relative z-10">{children}</span>
         </motion.button>
