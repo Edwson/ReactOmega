@@ -46,6 +46,11 @@ export const DigitalRain = memo(function DigitalRain({
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
+<<<<<<< HEAD
+=======
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+>>>>>>> 5fdd960 (feat: v0.1.0 — 7 new components, build toolchain, quality improvements, docs site)
         const canvas = canvasRef.current;
         if (!canvas) return;
 
@@ -58,6 +63,7 @@ export const DigitalRain = memo(function DigitalRain({
         const columns: number[] = [];
 
         const resize = () => {
+<<<<<<< HEAD
             canvas.width = canvas.offsetWidth;
             canvas.height = canvas.offsetHeight;
 
@@ -65,6 +71,17 @@ export const DigitalRain = memo(function DigitalRain({
             columns.length = 0;
             for (let i = 0; i < columnCount; i++) {
                 columns[i] = Math.random() * canvas.height;
+=======
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = canvas.offsetWidth * dpr;
+            canvas.height = canvas.offsetHeight * dpr;
+            ctx.scale(dpr, dpr);
+
+            const columnCount = Math.floor(canvas.offsetWidth / fontSize);
+            columns.length = 0;
+            for (let i = 0; i < columnCount; i++) {
+                columns[i] = Math.random() * canvas.offsetHeight;
+>>>>>>> 5fdd960 (feat: v0.1.0 — 7 new components, build toolchain, quality improvements, docs site)
             }
         };
 
@@ -78,9 +95,15 @@ export const DigitalRain = memo(function DigitalRain({
             if (deltaTime > 33 / speed) {
                 lastTime = timestamp;
 
+<<<<<<< HEAD
                 // Fade effect
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
+=======
+                // Fade effect — use logical dimensions (offsetWidth/Height) since ctx is scaled by dpr
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+>>>>>>> 5fdd960 (feat: v0.1.0 — 7 new components, build toolchain, quality improvements, docs site)
 
                 ctx.fillStyle = color;
                 ctx.font = `${fontSize}px monospace`;
@@ -92,7 +115,11 @@ export const DigitalRain = memo(function DigitalRain({
 
                     ctx.fillText(char, x, y);
 
+<<<<<<< HEAD
                     if (y > canvas.height && Math.random() > 0.975) {
+=======
+                    if (y > canvas.offsetHeight && Math.random() > 0.975) {
+>>>>>>> 5fdd960 (feat: v0.1.0 — 7 new components, build toolchain, quality improvements, docs site)
                         columns[i] = 0;
                     }
 

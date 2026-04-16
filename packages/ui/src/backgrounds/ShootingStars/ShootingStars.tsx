@@ -138,6 +138,11 @@ export const ShootingStars = memo(function ShootingStars({
 
     // Animation loop
     useEffect(() => {
+<<<<<<< HEAD
+=======
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+>>>>>>> 5fdd960 (feat: v0.1.0 — 7 new components, build toolchain, quality improvements, docs site)
         const canvas = canvasRef.current;
         if (!canvas) return;
 

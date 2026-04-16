@@ -17,3 +17,10 @@ export * from './MagneticIcon';
 export * from './ParticlesButton';
 export * from './TypewriterEffect';
 export * from './GlitchText';
+<<<<<<< HEAD
+=======
+export * from './BentoGrid';
+export * from './CardStack';
+export * from './InfiniteScroll';
+export * from './WaveButton';
+>>>>>>> 5fdd960 (feat: v0.1.0 — 7 new components, build toolchain, quality improvements, docs site)

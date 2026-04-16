@@ -20,6 +20,10 @@ dist/
 *.pem
 
 # Debug
+<<<<<<< HEAD
+=======
+*.log
+>>>>>>> 5fdd960 (feat: v0.1.0 — 7 new components, build toolchain, quality improvements, docs site)
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

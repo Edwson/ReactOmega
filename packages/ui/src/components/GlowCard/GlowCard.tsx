@@ -69,6 +69,10 @@ export const GlowCard = memo(function GlowCard({
             )}
             style={{
                 borderRadius,
+<<<<<<< HEAD
+=======
+                willChange: 'transform',
+>>>>>>> 5fdd960 (feat: v0.1.0 — 7 new components, build toolchain, quality improvements, docs site)
                 '--glow-color': hue ? `hsl(${hue}, 100%, 50%)` : glowColor,
                 '--glow-size': `${size}px`,
                 ...style,

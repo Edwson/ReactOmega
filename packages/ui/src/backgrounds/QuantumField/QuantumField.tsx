@@ -164,6 +164,13 @@ export const QuantumField = memo(function QuantumField({
     className,
     style,
 }: QuantumFieldProps) {
+<<<<<<< HEAD
+=======
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return null;
+    }
+
+>>>>>>> 5fdd960 (feat: v0.1.0 — 7 new components, build toolchain, quality improvements, docs site)
     return (
         <div
             className={cn(
