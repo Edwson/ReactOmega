@@ -5,11 +5,9 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  experimental: {
-    turbo: {
-      resolveAlias: {
-        '@reactomega/ui': '../../packages/ui/src/index.ts',
-      },
+  turbopack: {
+    resolveAlias: {
+      '@reactomega/ui': '../../packages/ui/src/index.ts',
     },
   },
 };
