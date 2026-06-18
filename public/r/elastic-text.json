@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "elastic-text",
+  "type": "registry:component",
+  "title": "Elastic Text",
+  "description": "Letters swell and lift with a springy, overshooting jelly squash-and-stretch as the pointer passes. Configurable stiffness, damping, scale, lift, radius.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/elastic-text.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/elastic-text.tsx",
+      "content": "\"use client\";\n\nimport { useEffect, useRef, type ElementType } from \"react\";\nimport { cn } from \"@/lib/utils\";\nimport { usePrefersReducedMotion } from \"@/hooks/use-prefers-reduced-motion\";\n\nexport interface ElasticTextProps {\n  text: string;\n  /** Extra scale at full influence. @default 0.6 */\n  maxScale?: number;\n  /** How far each letter rises at full influence (px). @default 10 */\n  lift?: number;\n  /** Influence radius in px. @default 90 */\n  radius?: number;\n  /** Spring acceleration (higher = snappier). @default 0.22 */\n  stiffness?: number;\n  /** Spring damping (lower = more jelly overshoot). @default 0.6 */\n  damping?: number;\n  className?: string;\n  /** Element to render as. @default \"span\" */\n  as?: ElementType;\n}\n\n/**\n * ElasticText — letters swell and lift with a springy, overshooting \"jelly\"\n * squash-and-stretch as the pointer passes. Letter positions are tracked\n * relative to the container (and its live rect is read each frame), so the\n * effect stays accurate while the page scrolls. Lower damping = more wobble.\n * Letters sit still for reduced-motion users.\n */\nexport function ElasticText({\n  text,\n  maxScale = 0.6,\n  lift = 10,\n  radius = 90,\n  stiffness = 0.22,\n  damping = 0.6,\n  className,\n  as: Tag = \"span\",\n}: ElasticTextProps) {\n  const containerRef = useRef<HTMLElement>(null);\n  const spans = useRef<(HTMLSpanElement | null)[]>([]);\n  const reduced = usePrefersReducedMotion();\n\n  useEffect(() => {\n    if (reduced) return;\n    const container = containerRef.current;\n    if (!container) return;\n    const items = spans.current.filter(Boolean) as HTMLSpanElement[];\n    if (!items.length) return;\n    const state = items.map(() => ({ val: 0, v: 0 }));\n    let offs: { ox: number; oy: number }[] = [];\n    const measure = () => {\n      const cr = container.getBoundingClientRect();\n      offs = items.map((s) => {\n        const prev = s.style.transform;\n        s.style.transform = \"none\";\n        const r = s.getBoundingClientRect();\n        s.style.transform = prev;\n        return { ox: r.left + r.width / 2 - cr.left, oy: r.top + r.height / 2 - cr.top };\n      });\n    };\n    measure();\n    const remeasure = requestAnimationFrame(measure);\n\n    let mx = -9999;\n    let my = -9999;\n    let raf = 0;\n    let running = false;\n    const step = () => {\n      const cr = container.getBoundingClientRect();\n      let active = false;\n      for (let i = 0; i < items.length; i++) {\n        const o = offs[i];\n        const s = state[i];\n        const dist = Math.hypot(mx - (cr.left + o.ox), my - (cr.top + o.oy));\n        const target = Math.max(0, 1 - dist / radius);\n        s.v = (s.v + (target - s.val) * stiffness) * damping;\n        s.val += s.v;\n        const sc = 1 + s.val * maxScale;\n        items[i].style.transform = `translateY(${(-s.val * lift).toFixed(2)}px) scale(${sc.toFixed(3)}, ${(1 + s.val * maxScale * 0.55).toFixed(3)})`;\n        if (Math.abs(s.val) > 0.002 || Math.abs(s.v) > 0.002) active = true;\n      }\n      if (active) raf = requestAnimationFrame(step);\n      else running = false;\n    };\n    const ensure = () => {\n      if (!running) {\n        running = true;\n        raf = requestAnimationFrame(step);\n      }\n    };\n    const onMove = (e: PointerEvent) => {\n      mx = e.clientX;\n      my = e.clientY;\n      ensure();\n    };\n    const onLeave = () => {\n      mx = -9999;\n      my = -9999;\n      ensure();\n    };\n    window.addEventListener(\"pointermove\", onMove, { passive: true });\n    window.addEventListener(\"resize\", measure);\n    container.addEventListener(\"pointerleave\", onLeave);\n    return () => {\n      cancelAnimationFrame(raf);\n      cancelAnimationFrame(remeasure);\n      window.removeEventListener(\"pointermove\", onMove);\n      window.removeEventListener(\"resize\", measure);\n      container.removeEventListener(\"pointerleave\", onLeave);\n    };\n  }, [text, maxScale, lift, radius, stiffness, damping, reduced]);\n\n  let idx = 0;\n  return (\n    <Tag ref={containerRef as React.Ref<HTMLElement>} className={cn(\"inline-block\", className)} aria-label={text}>\n      {text.split(/(\\s+)/).map((word, wi) =>\n        /^\\s+$/.test(word) ? (\n          <span key={`s${wi}`}>{word}</span>\n        ) : (\n          <span key={`w${wi}`} className=\"inline-block whitespace-nowrap\" aria-hidden>\n            {Array.from(word).map((ch) => {\n              const i = idx++;\n              return (\n                <span\n                  key={i}\n                  ref={(el) => {\n                    spans.current[i] = el;\n                  }}\n                  className=\"inline-block origin-bottom will-change-transform\"\n                >\n                  {ch}\n                </span>\n              );\n            })}\n          </span>\n        ),\n      )}\n    </Tag>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "text",
+    "tags": [
+      "text",
+      "elastic",
+      "jelly",
+      "spring",
+      "physics"
+    ]
+  }
+}

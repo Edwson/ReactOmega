@@ -1,0 +1,47 @@
+{
+  "name": "reactomega",
+  "version": "1.0.0",
+  "description": "The AI-native React component registry — premium, accessible, reduced-motion-safe motion, interaction & physics components, installable by humans and AI agents via a CLI, shadcn, or an MCP server.",
+  "keywords": [
+    "react",
+    "components",
+    "registry",
+    "shadcn",
+    "animation",
+    "motion",
+    "interaction",
+    "physics",
+    "tailwind",
+    "mcp",
+    "ai-native",
+    "accessibility",
+    "reduced-motion",
+    "copy-paste"
+  ],
+  "license": "MIT",
+  "author": "Ed Chen (https://www.edwson.com)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Edwson/ReactOmega.git"
+  },
+  "homepage": "https://github.com/Edwson/ReactOmega#readme",
+  "bin": {
+    "reactomega": "cli/index.mjs",
+    "reactomega-mcp": "mcp/server.mjs"
+  },
+  "scripts": {
+    "build:registry": "node scripts/build-registry.mjs",
+    "registry": "node cli/index.mjs",
+    "mcp": "node mcp/server.mjs",
+    "test:registry": "node scripts/test-registry.mjs",
+    "test:mcp": "node mcp/test-mcp.mjs",
+    "test": "node scripts/test-registry.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

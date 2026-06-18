@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dock",
+  "type": "registry:component",
+  "title": "Dock",
+  "description": "A macOS-style magnifying dock; items swell based on pointer distance. Renders as a toolbar.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/dock.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/dock.tsx",
+      "content": "\"use client\";\n\nimport { Children, useRef, useState } from \"react\";\nimport { cn } from \"@/lib/utils\";\nimport { usePrefersReducedMotion } from \"@/hooks/use-prefers-reduced-motion\";\n\nexport interface DockProps {\n  children: React.ReactNode;\n  className?: string;\n  /** Resting item size in px. @default 48 */\n  size?: number;\n  /** Maximum magnified size in px. @default 80 */\n  magnify?: number;\n  /** Pointer influence distance in px. @default 120 */\n  distance?: number;\n}\n\n/**\n * Dock — a macOS-style magnifying dock. Items swell based on pointer distance.\n * Renders as a `toolbar`; reduced-motion users get a plain, fixed-size row.\n */\nexport function Dock({ children, className, size = 48, magnify = 80, distance = 120 }: DockProps) {\n  const [mouseX, setMouseX] = useState<number | null>(null);\n  const reduced = usePrefersReducedMotion();\n  const items = Children.toArray(children);\n\n  return (\n    <div\n      role=\"toolbar\"\n      aria-label=\"Dock\"\n      onMouseMove={(e) => !reduced && setMouseX(e.clientX)}\n      onMouseLeave={() => setMouseX(null)}\n      className={cn(\n        \"mx-auto flex w-max items-end gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 pb-2 pt-3 backdrop-blur\",\n        className,\n      )}\n    >\n      {items.map((child, i) => (\n        <DockItem key={i} mouseX={mouseX} size={size} magnify={magnify} distance={distance}>\n          {child}\n        </DockItem>\n      ))}\n    </div>\n  );\n}\n\nfunction DockItem({\n  children,\n  mouseX,\n  size,\n  magnify,\n  distance,\n}: {\n  children: React.ReactNode;\n  mouseX: number | null;\n  size: number;\n  magnify: number;\n  distance: number;\n}) {\n  const ref = useRef<HTMLDivElement>(null);\n  let dimension = size;\n  if (mouseX !== null && ref.current) {\n    const r = ref.current.getBoundingClientRect();\n    const center = r.left + r.width / 2;\n    const t = Math.max(0, 1 - Math.abs(mouseX - center) / distance);\n    dimension = size + (magnify - size) * t;\n  }\n  return (\n    <div\n      ref={ref}\n      className=\"grid place-items-center transition-[width,height] duration-150 ease-out\"\n      style={{ width: dimension, height: dimension }}\n    >\n      {children}\n    </div>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "components",
+    "tags": [
+      "components",
+      "dock",
+      "magnify",
+      "nav"
+    ]
+  }
+}

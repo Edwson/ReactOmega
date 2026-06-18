@@ -1,0 +1,274 @@
+{
+  "$comment": "Single source of truth for the ReactOmega registry. scripts/build-registry.mjs reads this + the component source files to generate registry.json, public/r/*.json (shadcn-compatible), and llms.txt. 'uses' lists internal registry dependencies (primitives). 'dependencies' lists npm packages a consumer must install.",
+  "version": "1.0.0",
+  "primitives": {
+    "utils": {
+      "title": "cn() utility",
+      "type": "registry:lib",
+      "description": "Tailwind class merge helper used by every component.",
+      "source": "registry/reactomega/lib/utils.ts",
+      "target": "lib/utils.ts",
+      "dependencies": ["clsx", "tailwind-merge"],
+      "uses": []
+    },
+    "use-prefers-reduced-motion": {
+      "title": "usePrefersReducedMotion()",
+      "type": "registry:hook",
+      "description": "React hook that tracks the user's reduced-motion preference; motion components degrade gracefully when it is true.",
+      "source": "registry/reactomega/hooks/use-prefers-reduced-motion.ts",
+      "target": "hooks/use-prefers-reduced-motion.ts",
+      "dependencies": [],
+      "uses": []
+    }
+  },
+  "components": {
+    "split-text": {
+      "title": "Split Text",
+      "category": "text",
+      "description": "Reveals text per character or word on scroll into view with a staggered spring rise. Screen-reader safe via aria-label.",
+      "tags": ["text", "reveal", "scroll", "stagger"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "shiny-text": {
+      "title": "Shiny Text",
+      "category": "text",
+      "description": "A soft highlight sweeps across text on a loop. Pure CSS, zero dependencies.",
+      "tags": ["text", "shine", "css"],
+      "dependencies": [],
+      "uses": ["utils"]
+    },
+    "gradient-text": {
+      "title": "Gradient Text",
+      "category": "text",
+      "description": "An animated multi-stop gradient flows through the text. Pure CSS.",
+      "tags": ["text", "gradient", "css"],
+      "dependencies": [],
+      "uses": ["utils"]
+    },
+    "count-up": {
+      "title": "Count Up",
+      "category": "text",
+      "description": "Rolls a number from a start to a target with ease-out, optionally when scrolled into view. tabular-nums prevents width jitter.",
+      "tags": ["text", "number", "counter", "scroll"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "magnetic": {
+      "title": "Magnetic",
+      "category": "interaction",
+      "description": "Wraps any element so it drifts toward the pointer and springs back on leave. Mouse-only, reduced-motion safe.",
+      "tags": ["interaction", "pointer", "magnetic", "hover"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "spotlight-card": {
+      "title": "Spotlight Card",
+      "category": "interaction",
+      "description": "A card with a soft radial spotlight that tracks the pointer and fades on enter/leave.",
+      "tags": ["interaction", "card", "spotlight", "pointer"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "tilt-card": {
+      "title": "Tilt Card",
+      "category": "interaction",
+      "description": "A 3D card that tilts toward the pointer with an optional moving glare. Flat and static for reduced-motion users.",
+      "tags": ["interaction", "card", "3d", "tilt", "glare"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "click-spark": {
+      "title": "Click Spark",
+      "category": "interaction",
+      "description": "Emits a radial spark burst from the exact click point on a self-clearing canvas overlay.",
+      "tags": ["interaction", "click", "spark", "canvas"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "dot-grid": {
+      "title": "Dot Grid",
+      "category": "interaction",
+      "description": "An interactive dot field that lights up and swells around the pointer. A modern, non-cosmic backdrop.",
+      "tags": ["interaction", "background", "canvas", "pointer"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "star-border": {
+      "title": "Star Border",
+      "category": "components",
+      "description": "Two soft glints travel continuously around the border of any element. Pure CSS.",
+      "tags": ["components", "button", "border", "css"],
+      "dependencies": [],
+      "uses": ["utils"]
+    },
+    "dock": {
+      "title": "Dock",
+      "category": "components",
+      "description": "A macOS-style magnifying dock; items swell based on pointer distance. Renders as a toolbar.",
+      "tags": ["components", "dock", "magnify", "nav"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "marquee": {
+      "title": "Marquee",
+      "category": "components",
+      "description": "A seamless infinite scroller (horizontal or vertical) with edge fade and pause-on-hover.",
+      "tags": ["components", "marquee", "scroll", "css"],
+      "dependencies": [],
+      "uses": ["utils"]
+    },
+    "variable-proximity": {
+      "title": "Variable Proximity",
+      "category": "text",
+      "description": "Every letter's variable-font axes (weight, width, optical size, slant, or any custom axis) interpolate based on pointer distance. Fully configurable axes, radius, and falloff curve. Needs a variable font.",
+      "tags": ["text", "variable-font", "proximity", "pointer", "customizable"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "magnetic-text": {
+      "title": "Magnetic Text",
+      "category": "text",
+      "description": "Every letter is independently magnetic, springing toward the pointer and easing back with real spring physics. Configurable strength, radius, stiffness, damping.",
+      "tags": ["text", "magnetic", "spring", "pointer", "physics"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "gravity-text": {
+      "title": "Gravity Text",
+      "category": "text",
+      "description": "Letters detach and fall under real gravity, bounce off the floor with friction, then reassemble. Configurable gravity, bounce, friction, scatter, and trigger.",
+      "tags": ["text", "gravity", "physics", "bounce", "interactive"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "elastic-text": {
+      "title": "Elastic Text",
+      "category": "text",
+      "description": "Letters swell and lift with a springy, overshooting jelly squash-and-stretch as the pointer passes. Configurable stiffness, damping, scale, lift, radius.",
+      "tags": ["text", "elastic", "jelly", "spring", "physics"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "scramble-text": {
+      "title": "Scramble Text",
+      "category": "text",
+      "description": "Letters churn through random glyphs and lock in left-to-right like a decoding terminal. Configurable charset, speed, reveal wipe, and trigger.",
+      "tags": ["text", "scramble", "decode", "terminal", "customizable"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "spring-mesh": {
+      "title": "Spring Mesh",
+      "category": "physics",
+      "description": "An elastic lattice: every node is sprung to rest and coupled to its neighbors, so pressing the pointer sends real waves rippling outward that settle naturally.",
+      "tags": ["physics", "spring", "mesh", "canvas", "interactive"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "cloth": {
+      "title": "Cloth",
+      "category": "physics",
+      "description": "A real verlet-integrated fabric hanging from a pinned top edge under gravity. Grab any point and it folds, swings, and settles like cloth.",
+      "tags": ["physics", "verlet", "cloth", "drag", "canvas"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "metaballs": {
+      "title": "Metaballs",
+      "category": "physics",
+      "description": "A gooey fluid that flows toward the pointer and merges with surface-tension feel via an SVG goo filter. Configurable count, color, size, and viscosity.",
+      "tags": ["physics", "fluid", "gooey", "metaballs", "pointer"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "holographic-card": {
+      "title": "Holographic Card",
+      "category": "interaction",
+      "description": "An iridescent holo-foil card: a rainbow sheen and bright glare track the pointer with a color-dodge blend, over a subtle 3D tilt. Configurable tilt, intensity, and foil colors.",
+      "tags": ["interaction", "card", "holographic", "foil", "3d"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "text-reveal": {
+      "title": "Text Reveal",
+      "category": "text",
+      "description": "Words brighten one after another as the block scrolls through the viewport — a scroll-linked reading spotlight. Configurable dim/lit colors and edge softness.",
+      "tags": ["text", "scroll", "reveal", "reading"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "rope": {
+      "title": "Rope",
+      "category": "physics",
+      "description": "A verlet-integrated rope hangs from a fixed anchor — grab it, drag it, and watch it swing and settle under gravity.",
+      "tags": ["physics", "verlet", "canvas", "drag"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "pendulum-wave": {
+      "title": "Pendulum Wave",
+      "category": "physics",
+      "description": "A row of pendulums with subtly increasing lengths drift in and out of phase to form the classic traveling pendulum-wave pattern.",
+      "tags": ["physics", "pendulum", "wave", "canvas"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "newtons-cradle": {
+      "title": "Newton's Cradle",
+      "category": "physics",
+      "description": "An interactive Newton's cradle — pull an end ball back, release, and momentum transfers through the row to fling the far ball out.",
+      "tags": ["physics", "collision", "momentum", "canvas"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "water-ripple": {
+      "title": "Water Ripple",
+      "category": "physics",
+      "description": "A height-field water surface where pointer input spawns ripples that spread, reflect off edges, and shade from the local height gradient.",
+      "tags": ["physics", "water", "ripple", "canvas"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "gravity-wells": {
+      "title": "Gravity Wells",
+      "category": "physics",
+      "description": "Hundreds of particles orbit the pointer as a 1/dist^2 gravity well, leaving luminous trails via per-frame translucent fade.",
+      "tags": ["physics", "particles", "gravity", "trails"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "magnetic-field": {
+      "title": "Magnetic Field",
+      "category": "physics",
+      "description": "A grid of iron-filing segments that re-orient along a dipole field anchored at the pointer, with length and brightness scaling by proximity.",
+      "tags": ["physics", "magnetism", "field", "filings"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "soft-body": {
+      "title": "Soft Body",
+      "category": "physics",
+      "description": "A poke-able jelly blob held in a circle by perimeter, radius, and pressure springs that wobbles and recovers when you squish it with the pointer.",
+      "tags": ["physics", "soft-body", "springs", "canvas"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "plucked-string": {
+      "title": "Plucked String",
+      "category": "physics",
+      "description": "A string pinned at both ends that you grab and pluck, then watch vibrate with a realistic decaying wave driven by neighbor-averaging physics.",
+      "tags": ["physics", "string", "wave", "canvas"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    },
+    "falling-sand": {
+      "title": "Falling Sand",
+      "category": "physics",
+      "description": "A falling-sand cellular automaton where dragging the pointer pours colored grains that fall and slide diagonally into realistic piling mounds.",
+      "tags": ["physics", "cellular-automaton", "sand", "canvas"],
+      "dependencies": [],
+      "uses": ["utils", "use-prefers-reduced-motion"]
+    }
+  }
+}

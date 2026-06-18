@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tilt-card",
+  "type": "registry:component",
+  "title": "Tilt Card",
+  "description": "A 3D card that tilts toward the pointer with an optional moving glare. Flat and static for reduced-motion users.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/tilt-card.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/tilt-card.tsx",
+      "content": "\"use client\";\n\nimport { useRef, useState } from \"react\";\nimport { cn } from \"@/lib/utils\";\nimport { usePrefersReducedMotion } from \"@/hooks/use-prefers-reduced-motion\";\n\nexport interface TiltCardProps extends React.HTMLAttributes<HTMLDivElement> {\n  /** Maximum tilt in degrees. @default 12 */\n  max?: number;\n  /** Show a moving glare highlight. @default true */\n  glare?: boolean;\n  /** Scale while hovered. @default 1.02 */\n  scale?: number;\n}\n\n/**\n * TiltCard — a 3D card that tilts toward the pointer with an optional glare.\n * Reduced-motion users get a flat, static card (no tilt, no glare).\n */\nexport function TiltCard({\n  children,\n  className,\n  max = 12,\n  glare = true,\n  scale = 1.02,\n  ...props\n}: TiltCardProps) {\n  const ref = useRef<HTMLDivElement>(null);\n  const [t, setT] = useState({ rx: 0, ry: 0, gx: 50, gy: 50, active: false });\n  const reduced = usePrefersReducedMotion();\n\n  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {\n    if (reduced) return;\n    const el = ref.current;\n    if (!el) return;\n    const r = el.getBoundingClientRect();\n    const px = (e.clientX - r.left) / r.width;\n    const py = (e.clientY - r.top) / r.height;\n    setT({ rx: (0.5 - py) * 2 * max, ry: (px - 0.5) * 2 * max, gx: px * 100, gy: py * 100, active: true });\n  };\n\n  return (\n    <div\n      ref={ref}\n      onMouseMove={onMove}\n      onMouseLeave={() => setT((s) => ({ ...s, rx: 0, ry: 0, active: false }))}\n      className={cn(\"relative rounded-2xl border border-white/10 bg-neutral-950\", className)}\n      style={{\n        transform: `perspective(900px) rotateX(${t.rx}deg) rotateY(${t.ry}deg) scale(${t.active ? scale : 1})`,\n        transition: \"transform .25s cubic-bezier(.2,.7,.3,1)\",\n        transformStyle: \"preserve-3d\",\n      }}\n      {...props}\n    >\n      {children}\n      {glare && !reduced && (\n        <div\n          aria-hidden\n          className=\"pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-300\"\n          style={{\n            opacity: t.active ? 1 : 0,\n            background: `radial-gradient(circle at ${t.gx}% ${t.gy}%, rgba(255,255,255,.18), transparent 45%)`,\n          }}\n        />\n      )}\n    </div>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "interaction",
+    "tags": [
+      "interaction",
+      "card",
+      "3d",
+      "tilt",
+      "glare"
+    ]
+  }
+}

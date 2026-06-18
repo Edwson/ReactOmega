@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "text-reveal",
+  "type": "registry:component",
+  "title": "Text Reveal",
+  "description": "Words brighten one after another as the block scrolls through the viewport — a scroll-linked reading spotlight. Configurable dim/lit colors and edge softness.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/text-reveal.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/text-reveal.tsx",
+      "content": "\"use client\";\n\nimport { useEffect, useRef } from \"react\";\nimport { cn } from \"@/lib/utils\";\nimport { usePrefersReducedMotion } from \"@/hooks/use-prefers-reduced-motion\";\n\nexport interface TextRevealProps {\n  text: string;\n  className?: string;\n  /** Color of words not yet revealed. @default \"rgba(255,255,255,.16)\" */\n  dimColor?: string;\n  /** Color of revealed words. @default \"#ffffff\" */\n  litColor?: string;\n  /** Softness of the reveal edge, in words. @default 4 */\n  softness?: number;\n}\n\n/**\n * TextReveal — words brighten one after another as the block scrolls through the\n * viewport (scroll-linked, not a one-shot). A reading spotlight that follows the\n * scroll. Fully lit immediately for reduced-motion users.\n */\nexport function TextReveal({\n  text,\n  className,\n  dimColor = \"rgba(255,255,255,.16)\",\n  litColor = \"#ffffff\",\n  softness = 4,\n}: TextRevealProps) {\n  const ref = useRef<HTMLParagraphElement>(null);\n  const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);\n  const reduced = usePrefersReducedMotion();\n  const words = text.split(\" \");\n\n  useEffect(() => {\n    if (reduced) {\n      wordRefs.current.forEach((w) => w && (w.style.color = litColor));\n      return;\n    }\n    const el = ref.current;\n    if (!el) return;\n    let raf = 0;\n    const update = () => {\n      raf = 0;\n      const r = el.getBoundingClientRect();\n      const vh = window.innerHeight || 1;\n      const progress = Math.max(0, Math.min(1, (vh * 0.82 - r.top) / (r.height + vh * 0.5)));\n      const head = progress * (words.length + softness);\n      wordRefs.current.forEach((w, i) => {\n        if (!w) return;\n        const t = Math.max(0, Math.min(1, (head - i) / softness));\n        w.style.color = t >= 1 ? litColor : t <= 0 ? dimColor : litColor;\n        w.style.opacity = String(0.18 + t * 0.82);\n      });\n    };\n    const onScroll = () => {\n      if (!raf) raf = requestAnimationFrame(update);\n    };\n    update();\n    window.addEventListener(\"scroll\", onScroll, { passive: true });\n    window.addEventListener(\"resize\", onScroll);\n    return () => {\n      cancelAnimationFrame(raf);\n      window.removeEventListener(\"scroll\", onScroll);\n      window.removeEventListener(\"resize\", onScroll);\n    };\n  }, [text, dimColor, litColor, softness, reduced]);\n\n  return (\n    <p ref={ref} className={cn(\"flex flex-wrap\", className)} aria-label={text}>\n      {words.map((w, i) => (\n        <span\n          key={i}\n          aria-hidden\n          ref={(el) => {\n            wordRefs.current[i] = el;\n          }}\n          className=\"mr-[0.25em] transition-colors\"\n          style={{ color: dimColor, opacity: 0.18 }}\n        >\n          {w}\n        </span>\n      ))}\n    </p>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "text",
+    "tags": [
+      "text",
+      "scroll",
+      "reveal",
+      "reading"
+    ]
+  }
+}

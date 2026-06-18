@@ -1,0 +1,27 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "shiny-text",
+  "type": "registry:component",
+  "title": "Shiny Text",
+  "description": "A soft highlight sweeps across text on a loop. Pure CSS, zero dependencies.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/shiny-text.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/shiny-text.tsx",
+      "content": "\"use client\";\n\nimport { cn } from \"@/lib/utils\";\n\nexport interface ShinyTextProps {\n  text: string;\n  className?: string;\n  /** Seconds for one sheen sweep. @default 3 */\n  speed?: number;\n  /** Base text color. @default \"#9aa0ad\" */\n  color?: string;\n  /** Highlight color of the sweep. @default \"#ffffff\" */\n  shine?: string;\n  /** Optional colored glint trailing the white peak. @default \"#cbb8ff\" */\n  glint?: string;\n  /** Pause the sweep. @default false */\n  disabled?: boolean;\n}\n\n/**\n * ShinyText — a soft highlight sweeps across the text on a loop. Pure CSS,\n * no dependencies. Honors reduced-motion automatically.\n */\nexport function ShinyText({\n  text,\n  className,\n  speed = 3,\n  color = \"#9aa0ad\",\n  shine = \"#ffffff\",\n  glint = \"#cbb8ff\",\n  disabled = false,\n}: ShinyTextProps) {\n  return (\n    <span\n      className={cn(\"ro-shiny inline-block bg-clip-text text-transparent\", className)}\n      style={{\n        backgroundImage: `linear-gradient(110deg, ${color} 30%, ${shine} 46%, ${shine} 50%, ${glint} 56%, ${color} 70%)`,\n        backgroundSize: \"220% 100%\",\n        WebkitBackgroundClip: \"text\",\n        animation: disabled ? \"none\" : `ro-shine ${speed}s linear infinite`,\n      }}\n    >\n      {text}\n      <style>{`@keyframes ro-shine{to{background-position:-200% 0}}@media(prefers-reduced-motion:reduce){.ro-shiny{animation:none!important}}`}</style>\n    </span>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "text",
+    "tags": [
+      "text",
+      "shine",
+      "css"
+    ]
+  }
+}

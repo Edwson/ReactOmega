@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "count-up",
+  "type": "registry:component",
+  "title": "Count Up",
+  "description": "Rolls a number from a start to a target with ease-out, optionally when scrolled into view. tabular-nums prevents width jitter.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/count-up.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/count-up.tsx",
+      "content": "\"use client\";\n\nimport { useEffect, useRef, useState } from \"react\";\nimport { cn } from \"@/lib/utils\";\nimport { usePrefersReducedMotion } from \"@/hooks/use-prefers-reduced-motion\";\n\nexport interface CountUpProps {\n  /** Target value. */\n  to: number;\n  /** Starting value. @default 0 */\n  from?: number;\n  /** Seconds the roll takes. @default 2 */\n  duration?: number;\n  /** Decimal places. @default 0 */\n  decimals?: number;\n  prefix?: string;\n  suffix?: string;\n  /** Group thousands (1,234). @default true */\n  separator?: boolean;\n  className?: string;\n  /** Start when scrolled into view. @default true */\n  startOnView?: boolean;\n}\n\nconst easeOutExpo = (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));\n\nfunction format(n: number, decimals: number, separator: boolean) {\n  const fixed = n.toFixed(decimals);\n  if (!separator) return fixed;\n  const [int, dec] = fixed.split(\".\");\n  const grouped = int.replace(/\\B(?=(\\d{3})+(?!\\d))/g, \",\");\n  return dec ? `${grouped}.${dec}` : grouped;\n}\n\n/**\n * CountUp — rolls a number from `from` to `to` with an ease-out, optionally\n * triggered when it scrolls into view. Reduced-motion users get the final\n * value immediately. Uses tabular-nums to avoid width jitter.\n */\nexport function CountUp({\n  to,\n  from = 0,\n  duration = 2,\n  decimals = 0,\n  prefix = \"\",\n  suffix = \"\",\n  separator = true,\n  className,\n  startOnView = true,\n}: CountUpProps) {\n  const ref = useRef<HTMLSpanElement>(null);\n  const [val, setVal] = useState(from);\n  const [armed, setArmed] = useState(!startOnView);\n  const reduced = usePrefersReducedMotion();\n\n  useEffect(() => {\n    if (armed) return;\n    const el = ref.current;\n    if (!el || typeof IntersectionObserver === \"undefined\") {\n      setArmed(true);\n      return;\n    }\n    const onScreen = () => {\n      const r = el.getBoundingClientRect();\n      const vh = window.innerHeight || document.documentElement.clientHeight || 0;\n      return r.bottom > 0 && r.top < vh;\n    };\n    const io = new IntersectionObserver(\n      (entries) =>\n        entries.forEach((e) => {\n          if (e.isIntersecting) {\n            setArmed(true);\n            io.disconnect();\n          }\n        }),\n      { threshold: 0.3 },\n    );\n    io.observe(el);\n    // Fallback: after first layout, start if already on screen — robust to\n    // lazy-mount wrappers and StrictMode, where the observer's first callback\n    // can be dropped, leaving the number stuck at its start value.\n    const raf = requestAnimationFrame(() => {\n      if (onScreen()) setArmed(true);\n    });\n    return () => {\n      cancelAnimationFrame(raf);\n      io.disconnect();\n    };\n  }, [armed]);\n\n  useEffect(() => {\n    if (!armed) return;\n    if (reduced) {\n      setVal(to);\n      return;\n    }\n    let raf = 0;\n    const t0 = performance.now();\n    const tick = (now: number) => {\n      // Clamp to [0,1]: the first rAF timestamp can predate t0, and a negative\n      // p makes easeOutExpo blow up (flashing a wild negative value).\n      const p = Math.max(0, Math.min(1, (now - t0) / (duration * 1000)));\n      setVal(from + (to - from) * easeOutExpo(p));\n      if (p < 1) raf = requestAnimationFrame(tick);\n    };\n    raf = requestAnimationFrame(tick);\n    return () => cancelAnimationFrame(raf);\n  }, [armed, to, from, duration, reduced]);\n\n  return (\n    <span ref={ref} className={cn(\"tabular-nums\", className)}>\n      {prefix}\n      {format(val, decimals, separator)}\n      {suffix}\n    </span>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "text",
+    "tags": [
+      "text",
+      "number",
+      "counter",
+      "scroll"
+    ]
+  }
+}

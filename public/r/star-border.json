@@ -1,0 +1,28 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "star-border",
+  "type": "registry:component",
+  "title": "Star Border",
+  "description": "Two soft glints travel continuously around the border of any element. Pure CSS.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/star-border.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/star-border.tsx",
+      "content": "\"use client\";\n\nimport { cn } from \"@/lib/utils\";\n\nexport interface StarBorderProps extends React.HTMLAttributes<HTMLElement> {\n  /** Element to render as. @default \"button\" */\n  as?: React.ElementType;\n  /** Orbiting light color. @default \"#7c5cff\" */\n  color?: string;\n  /** Seconds per full orbit. @default 4 */\n  speed?: number;\n  /** Border thickness in px. @default 2 */\n  thickness?: number;\n  /** Inner panel background. @default \"#0a0a0f\" */\n  background?: string;\n}\n\n/**\n * StarBorder — two bright light arcs orbit the edge of any element via a\n * rotating conic gradient, leaving a clear comet-trail around the border.\n * Pure CSS. Reduced-motion users get a calm static gradient edge.\n */\nexport function StarBorder({\n  as: Tag = \"button\",\n  color = \"#7c5cff\",\n  speed = 4,\n  thickness = 2,\n  background = \"#0a0a0f\",\n  className,\n  children,\n  style,\n  ...props\n}: StarBorderProps) {\n  const ring = `conic-gradient(from 0deg, transparent 0deg, ${color} 45deg, #ffffff 70deg, ${color} 95deg, transparent 150deg, transparent 225deg, ${color} 270deg, #ffffff 290deg, ${color} 315deg, transparent 360deg)`;\n  return (\n    <Tag\n      className={cn(\n        \"ro-star relative isolate inline-flex items-center justify-center overflow-hidden rounded-2xl\",\n        className,\n      )}\n      style={{ padding: thickness, ...style }}\n      {...props}\n    >\n      <span\n        aria-hidden\n        className=\"ro-star-ring absolute left-1/2 top-1/2 -z-10 aspect-square w-[160%]\"\n        style={{ background: ring, animationDuration: `${speed}s` }}\n      />\n      <span\n        className=\"relative z-10 block w-full rounded-[14px] px-6 py-3 text-center font-medium text-white\"\n        style={{ background }}\n      >\n        {children}\n      </span>\n      <style>{`.ro-star-ring{transform:translate(-50%,-50%);animation:ro-star-spin linear infinite}@keyframes ro-star-spin{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}@media(prefers-reduced-motion:reduce){.ro-star-ring{animation:none!important;background:linear-gradient(120deg,${color},transparent 70%)!important}}`}</style>\n    </Tag>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "components",
+    "tags": [
+      "components",
+      "button",
+      "border",
+      "css"
+    ]
+  }
+}

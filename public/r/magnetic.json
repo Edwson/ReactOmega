@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "magnetic",
+  "type": "registry:component",
+  "title": "Magnetic",
+  "description": "Wraps any element so it drifts toward the pointer and springs back on leave. Mouse-only, reduced-motion safe.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/magnetic.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/magnetic.tsx",
+      "content": "\"use client\";\n\nimport { useRef, useState } from \"react\";\nimport { cn } from \"@/lib/utils\";\nimport { usePrefersReducedMotion } from \"@/hooks/use-prefers-reduced-motion\";\n\nexport interface MagneticProps {\n  children: React.ReactNode;\n  className?: string;\n  /** Maximum px the element travels toward the pointer. @default 24 */\n  strength?: number;\n  /** Spring-back smoothing (CSS transition seconds). @default 0.3 */\n  ease?: number;\n}\n\n/**\n * Magnetic — wraps any element so it drifts toward the pointer and springs\n * back on leave. Only engages for mouse input and never for reduced-motion\n * users, so it stays calm on touch and assistive setups.\n */\nexport function Magnetic({ children, className, strength = 24, ease = 0.3 }: MagneticProps) {\n  const ref = useRef<HTMLDivElement>(null);\n  const [pos, setPos] = useState({ x: 0, y: 0 });\n  const reduced = usePrefersReducedMotion();\n\n  const onMove = (e: React.PointerEvent<HTMLDivElement>) => {\n    if (reduced || e.pointerType !== \"mouse\") return;\n    const el = ref.current;\n    if (!el) return;\n    const r = el.getBoundingClientRect();\n    const mx = e.clientX - (r.left + r.width / 2);\n    const my = e.clientY - (r.top + r.height / 2);\n    const half = Math.max(r.width, r.height) / 2 || 1;\n    const pull = Math.min(1, Math.hypot(mx, my) / (half * 2));\n    setPos({ x: (mx / half) * strength * pull, y: (my / half) * strength * pull });\n  };\n\n  return (\n    <div\n      ref={ref}\n      onPointerMove={onMove}\n      onPointerLeave={() => setPos({ x: 0, y: 0 })}\n      className={cn(\"inline-block\", className)}\n      style={{\n        transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,\n        transition: `transform ${ease}s cubic-bezier(.2,.7,.3,1)`,\n      }}\n    >\n      {children}\n    </div>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "interaction",
+    "tags": [
+      "interaction",
+      "pointer",
+      "magnetic",
+      "hover"
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scramble-text",
+  "type": "registry:component",
+  "title": "Scramble Text",
+  "description": "Letters churn through random glyphs and lock in left-to-right like a decoding terminal. Configurable charset, speed, reveal wipe, and trigger.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/scramble-text.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/scramble-text.tsx",
+      "content": "\"use client\";\n\nimport { useEffect, useRef, useState, type ElementType } from \"react\";\nimport { cn } from \"@/lib/utils\";\nimport { usePrefersReducedMotion } from \"@/hooks/use-prefers-reduced-motion\";\n\nexport interface ScrambleTextProps {\n  text: string;\n  /** What starts the decode. @default \"view\" */\n  trigger?: \"hover\" | \"view\" | \"load\";\n  /** Glyphs cycled before a letter locks in. */\n  charset?: string;\n  /** Milliseconds per scramble frame. @default 40 */\n  speed?: number;\n  /** Extra ms before each successive character locks (the wipe). @default 60 */\n  revealDelay?: number;\n  /** Re-run on every hover (trigger=\"hover\"). @default true */\n  loop?: boolean;\n  className?: string;\n  /** Element to render as. @default \"span\" */\n  as?: ElementType;\n}\n\nconst DEFAULT_CHARSET = \"!<>-_\\\\/[]{}—=+*^?#abcdef0123456789\";\n\n/**\n * ScrambleText — letters churn through random glyphs and lock in left-to-right,\n * like a decoding terminal. Configure the charset, speed, reveal wipe, and what\n * triggers it. Reduced-motion users see the final text immediately.\n */\nexport function ScrambleText({\n  text,\n  trigger = \"view\",\n  charset = DEFAULT_CHARSET,\n  speed = 40,\n  revealDelay = 60,\n  loop = true,\n  className,\n  as: Tag = \"span\",\n}: ScrambleTextProps) {\n  const [display, setDisplay] = useState(text);\n  const ref = useRef<HTMLElement>(null);\n  const timer = useRef<ReturnType<typeof setInterval> | null>(null);\n  const reduced = usePrefersReducedMotion();\n\n  const run = () => {\n    if (reduced) { setDisplay(text); return; }\n    if (timer.current) clearInterval(timer.current);\n    const chars = Array.from(text);\n    let elapsed = 0;\n    const lockAt = chars.map((_, i) => i * revealDelay);\n    const maxLock = lockAt[lockAt.length - 1] ?? 0;\n    timer.current = setInterval(() => {\n      elapsed += speed;\n      setDisplay(\n        chars\n          .map((c, i) => {\n            if (c === \" \" || elapsed >= lockAt[i] + speed) return c;\n            return charset[(Math.random() * charset.length) | 0];\n          })\n          .join(\"\"),\n      );\n      if (elapsed >= maxLock + speed) {\n        clearInterval(timer.current!);\n        timer.current = null;\n        setDisplay(text);\n      }\n    }, speed);\n  };\n\n  useEffect(() => {\n    if (reduced) { setDisplay(text); return; }\n    if (trigger === \"load\") { run(); return () => { if (timer.current) clearInterval(timer.current); }; }\n    if (trigger === \"view\") {\n      const el = ref.current;\n      if (!el || typeof IntersectionObserver === \"undefined\") { run(); return; }\n      const io = new IntersectionObserver(\n        (entries) => entries.forEach((e) => { if (e.isIntersecting) { run(); io.disconnect(); } }),\n        { threshold: 0.4 },\n      );\n      io.observe(el);\n      return () => { io.disconnect(); if (timer.current) clearInterval(timer.current); };\n    }\n    return () => { if (timer.current) clearInterval(timer.current); };\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, [text, trigger, reduced]);\n\n  const hoverProps = trigger === \"hover\" && !reduced ? { onPointerEnter: () => (loop || display !== text) && run() } : {};\n\n  return (\n    <Tag ref={ref as React.Ref<HTMLElement>} className={cn(\"inline-block tabular-nums\", className)} aria-label={text} {...hoverProps}>\n      <span aria-hidden>{display}</span>\n    </Tag>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "text",
+    "tags": [
+      "text",
+      "scramble",
+      "decode",
+      "terminal",
+      "customizable"
+    ]
+  }
+}

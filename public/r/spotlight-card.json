@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spotlight-card",
+  "type": "registry:component",
+  "title": "Spotlight Card",
+  "description": "A card with a soft radial spotlight that tracks the pointer and fades on enter/leave.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/spotlight-card.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/spotlight-card.tsx",
+      "content": "\"use client\";\n\nimport { useRef, useState } from \"react\";\nimport { cn } from \"@/lib/utils\";\nimport { usePrefersReducedMotion } from \"@/hooks/use-prefers-reduced-motion\";\n\nexport interface SpotlightCardProps extends React.HTMLAttributes<HTMLDivElement> {\n  /** Spotlight color. @default \"rgba(124,92,255,.18)\" */\n  color?: string;\n  /** Spotlight radius in px. @default 240 */\n  radius?: number;\n}\n\n/**\n * SpotlightCard — a card with a soft radial spotlight that tracks the pointer\n * and fades in/out on enter/leave. The fade is removed for reduced-motion users\n * (the highlight appears instantly, with no easing).\n */\nexport function SpotlightCard({\n  children,\n  className,\n  color = \"rgba(124,92,255,.18)\",\n  radius = 240,\n  ...props\n}: SpotlightCardProps) {\n  const ref = useRef<HTMLDivElement>(null);\n  const [p, setP] = useState({ x: 0, y: 0 });\n  const [on, setOn] = useState(false);\n  const reduced = usePrefersReducedMotion();\n\n  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {\n    const el = ref.current;\n    if (!el) return;\n    const r = el.getBoundingClientRect();\n    setP({ x: e.clientX - r.left, y: e.clientY - r.top });\n  };\n\n  return (\n    <div\n      ref={ref}\n      onMouseMove={onMove}\n      onMouseEnter={() => setOn(true)}\n      onMouseLeave={() => setOn(false)}\n      className={cn(\"relative overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 p-6\", className)}\n      {...props}\n    >\n      <div\n        aria-hidden\n        className={cn(\"pointer-events-none absolute inset-0\", !reduced && \"transition-opacity duration-300\")}\n        style={{\n          opacity: on ? 1 : 0,\n          background: `radial-gradient(${radius}px circle at ${p.x}px ${p.y}px, ${color}, transparent 70%)`,\n        }}\n      />\n      <div className=\"relative\">{children}</div>\n    </div>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "interaction",
+    "tags": [
+      "interaction",
+      "card",
+      "spotlight",
+      "pointer"
+    ]
+  }
+}

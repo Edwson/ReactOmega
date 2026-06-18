@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "holographic-card",
+  "type": "registry:component",
+  "title": "Holographic Card",
+  "description": "An iridescent holo-foil card: a rainbow sheen and bright glare track the pointer with a color-dodge blend, over a subtle 3D tilt. Configurable tilt, intensity, and foil colors.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/holographic-card.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/holographic-card.tsx",
+      "content": "\"use client\";\n\nimport { useRef, useState } from \"react\";\nimport { cn } from \"@/lib/utils\";\nimport { usePrefersReducedMotion } from \"@/hooks/use-prefers-reduced-motion\";\n\nexport interface HolographicCardProps extends React.HTMLAttributes<HTMLDivElement> {\n  /** Max 3D tilt in degrees. @default 10 */\n  tilt?: number;\n  /** Holographic foil strength, 0..1. @default 0.45 */\n  intensity?: number;\n  /** Rainbow stops of the foil. */\n  colors?: string[];\n}\n\nconst DEFAULT_FOIL = [\"#ff0080\", \"#ffce00\", \"#00ff8a\", \"#00b3ff\", \"#c800ff\", \"#ff0080\"];\n\n/**\n * HolographicCard — an iridescent \"holo foil\" card. A rainbow sheen and a bright\n * glare track the pointer and shift with a color-dodge blend, over a subtle 3D\n * tilt — like a holographic trading card. Calm and flat for reduced-motion users.\n */\nexport function HolographicCard({\n  children,\n  className,\n  tilt = 10,\n  intensity = 0.45,\n  colors = DEFAULT_FOIL,\n  ...props\n}: HolographicCardProps) {\n  const ref = useRef<HTMLDivElement>(null);\n  const [p, setP] = useState({ x: 0.5, y: 0.5, active: false });\n  const reduced = usePrefersReducedMotion();\n\n  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {\n    if (reduced) return;\n    const el = ref.current;\n    if (!el) return;\n    const r = el.getBoundingClientRect();\n    setP({ x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height, active: true });\n  };\n\n  const rx = reduced ? 0 : (0.5 - p.y) * 2 * tilt;\n  const ry = reduced ? 0 : (p.x - 0.5) * 2 * tilt;\n  const foil = `linear-gradient(${115 + p.x * 50}deg, ${colors.join(\", \")})`;\n\n  return (\n    <div\n      ref={ref}\n      onMouseMove={onMove}\n      onMouseLeave={() => setP((s) => ({ ...s, active: false }))}\n      className={cn(\"relative overflow-hidden rounded-2xl border border-white/10 bg-neutral-950\", className)}\n      style={{\n        transform: `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`,\n        transition: \"transform .25s cubic-bezier(.2,.7,.3,1)\",\n      }}\n      {...props}\n    >\n      {/* holographic foil */}\n      <div\n        aria-hidden\n        className=\"pointer-events-none absolute inset-0 transition-opacity duration-300\"\n        style={{\n          opacity: (reduced ? 0.25 : p.active ? 1 : 0.2) * intensity,\n          backgroundImage: foil,\n          backgroundSize: \"300% 300%\",\n          backgroundPosition: `${p.x * 100}% ${p.y * 100}%`,\n          mixBlendMode: \"color-dodge\",\n        }}\n      />\n      {/* moving glare */}\n      {!reduced && (\n        <div\n          aria-hidden\n          className=\"pointer-events-none absolute inset-0 transition-opacity duration-300\"\n          style={{\n            opacity: p.active ? 1 : 0,\n            background: `radial-gradient(circle at ${p.x * 100}% ${p.y * 100}%, rgba(255,255,255,.35), transparent 45%)`,\n            mixBlendMode: \"overlay\",\n          }}\n        />\n      )}\n      <div className=\"relative\">{children}</div>\n    </div>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "interaction",
+    "tags": [
+      "interaction",
+      "card",
+      "holographic",
+      "foil",
+      "3d"
+    ]
+  }
+}

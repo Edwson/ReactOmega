@@ -1,0 +1,60 @@
+# ReactOmega
+
+> AI-native React component registry — premium, accessible, reduced-motion-safe motion & interaction components. v1.0.0. Install any component in one line via the ReactOmega CLI, shadcn, or an MCP server. Source of truth: /registry.json.
+
+## Install a component
+```
+npx reactomega add <name>            # the ReactOmega CLI
+npx shadcn@latest add https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/<name>.json   # via shadcn
+```
+Every component is a self-contained file copied into your project (you own the code). They use Tailwind + a tiny cn() helper, honor prefers-reduced-motion, and are screen-reader aware.
+
+## Text Animations
+- `split-text` — Reveals text per character or word on scroll into view with a staggered spring rise. Screen-reader safe via aria-label.
+- `shiny-text` — A soft highlight sweeps across text on a loop. Pure CSS, zero dependencies.
+- `gradient-text` — An animated multi-stop gradient flows through the text. Pure CSS.
+- `count-up` — Rolls a number from a start to a target with ease-out, optionally when scrolled into view. tabular-nums prevents width jitter.
+- `variable-proximity` — Every letter's variable-font axes (weight, width, optical size, slant, or any custom axis) interpolate based on pointer distance. Fully configurable axes, radius, and falloff curve. Needs a variable font.
+- `magnetic-text` — Every letter is independently magnetic, springing toward the pointer and easing back with real spring physics. Configurable strength, radius, stiffness, damping.
+- `gravity-text` — Letters detach and fall under real gravity, bounce off the floor with friction, then reassemble. Configurable gravity, bounce, friction, scatter, and trigger.
+- `elastic-text` — Letters swell and lift with a springy, overshooting jelly squash-and-stretch as the pointer passes. Configurable stiffness, damping, scale, lift, radius.
+- `scramble-text` — Letters churn through random glyphs and lock in left-to-right like a decoding terminal. Configurable charset, speed, reveal wipe, and trigger.
+- `text-reveal` — Words brighten one after another as the block scrolls through the viewport — a scroll-linked reading spotlight. Configurable dim/lit colors and edge softness.
+
+## Interaction & Motion
+- `magnetic` — Wraps any element so it drifts toward the pointer and springs back on leave. Mouse-only, reduced-motion safe.
+- `spotlight-card` — A card with a soft radial spotlight that tracks the pointer and fades on enter/leave.
+- `tilt-card` — A 3D card that tilts toward the pointer with an optional moving glare. Flat and static for reduced-motion users.
+- `click-spark` — Emits a radial spark burst from the exact click point on a self-clearing canvas overlay.
+- `dot-grid` — An interactive dot field that lights up and swells around the pointer. A modern, non-cosmic backdrop.
+- `holographic-card` — An iridescent holo-foil card: a rainbow sheen and bright glare track the pointer with a color-dodge blend, over a subtle 3D tilt. Configurable tilt, intensity, and foil colors.
+
+## Components
+- `star-border` — Two soft glints travel continuously around the border of any element. Pure CSS.
+- `dock` — A macOS-style magnifying dock; items swell based on pointer distance. Renders as a toolbar.
+- `marquee` — A seamless infinite scroller (horizontal or vertical) with edge fade and pause-on-hover.
+
+## Physics & Art
+- `spring-mesh` — An elastic lattice: every node is sprung to rest and coupled to its neighbors, so pressing the pointer sends real waves rippling outward that settle naturally.
+- `cloth` — A real verlet-integrated fabric hanging from a pinned top edge under gravity. Grab any point and it folds, swings, and settles like cloth.
+- `metaballs` — A gooey fluid that flows toward the pointer and merges with surface-tension feel via an SVG goo filter. Configurable count, color, size, and viscosity.
+- `rope` — A verlet-integrated rope hangs from a fixed anchor — grab it, drag it, and watch it swing and settle under gravity.
+- `pendulum-wave` — A row of pendulums with subtly increasing lengths drift in and out of phase to form the classic traveling pendulum-wave pattern.
+- `newtons-cradle` — An interactive Newton's cradle — pull an end ball back, release, and momentum transfers through the row to fling the far ball out.
+- `water-ripple` — A height-field water surface where pointer input spawns ripples that spread, reflect off edges, and shade from the local height gradient.
+- `gravity-wells` — Hundreds of particles orbit the pointer as a 1/dist^2 gravity well, leaving luminous trails via per-frame translucent fade.
+- `magnetic-field` — A grid of iron-filing segments that re-orient along a dipole field anchored at the pointer, with length and brightness scaling by proximity.
+- `soft-body` — A poke-able jelly blob held in a circle by perimeter, radius, and pressure springs that wobbles and recovers when you squish it with the pointer.
+- `plucked-string` — A string pinned at both ends that you grab and pluck, then watch vibrate with a realistic decaying wave driven by neighbor-averaging physics.
+- `falling-sand` — A falling-sand cellular automaton where dragging the pointer pours colored grains that fall and slide diagonally into realistic piling mounds.
+
+## Primitives (added automatically as dependencies)
+- `utils` — Tailwind class merge helper used by every component.
+- `use-prefers-reduced-motion` — React hook that tracks the user's reduced-motion preference; motion components degrade gracefully when it is true.
+
+## Machine-readable & MCP
+- Registry index: [/registry.json](registry.json) — every component with deps + file targets.
+- Per-component item (with source): https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/<name>.json
+- MCP server: `npx -y github:Edwson/ReactOmega reactomega-mcp` — tools: list_components, get_component, add_component.
+
+MIT © Ed Chen (https://www.edwson.com).

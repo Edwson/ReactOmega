@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pendulum-wave",
+  "type": "registry:component",
+  "title": "Pendulum Wave",
+  "description": "A row of pendulums with subtly increasing lengths drift in and out of phase to form the classic traveling pendulum-wave pattern.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/pendulum-wave.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/pendulum-wave.tsx",
+      "content": "\"use client\";\n\nimport { useEffect, useRef } from \"react\";\nimport { cn } from \"@/lib/utils\";\nimport { usePrefersReducedMotion } from \"@/hooks/use-prefers-reduced-motion\";\n\nexport interface PendulumWaveProps {\n  className?: string;\n  /** Number of pendulums in the row. @default 15 */\n  count?: number;\n  /** Seconds for the whole pattern to drift apart and re-sync. @default 14 */\n  cycle?: number;\n  /** Swing amplitude in radians (~0.5 ≈ 29°). @default 0.5 */\n  amplitude?: number;\n  /** Line + bob color. @default \"#7c5cff\" */\n  color?: string;\n  /** Bob circle radius in px. @default 6 */\n  bobRadius?: number;\n}\n\n/**\n * PendulumWave — a row of pendulums hung from a top bar, each a little longer\n * than the last. Their periods are spaced harmonically (the shortest swings\n * exactly one more time per cycle than its neighbour), so they sweep through\n * the classic traveling-wave \"dance\" and re-sync every `cycle` seconds. Uses\n * closed-form simple-harmonic motion — smooth and rock-stable, never chaotic.\n * Reduced-motion users see every pendulum hanging vertical at rest.\n */\nexport function PendulumWave({\n  className,\n  count = 15,\n  cycle = 14,\n  amplitude = 0.5,\n  color = \"#7c5cff\",\n  bobRadius = 6,\n}: PendulumWaveProps) {\n  const ref = useRef<HTMLCanvasElement>(null);\n  const reduced = usePrefersReducedMotion();\n\n  useEffect(() => {\n    const canvas = ref.current;\n    if (!canvas) return;\n    const ctx = canvas.getContext(\"2d\");\n    if (!ctx) return;\n    const dpr = Math.min(window.devicePixelRatio || 1, 2);\n    let w = 0, h = 0, barY = 0;\n    type Pen = { len: number; x: number; omega: number };\n    let pens: Pen[] = [];\n    let raf = 0;\n    let start = 0;\n    // The slowest pendulum completes this many swings per cycle; each shorter\n    // one does one more. The spread of frequencies is what makes the wave.\n    const minSwings = 8;\n\n    const build = () => {\n      const r = canvas.getBoundingClientRect();\n      w = r.width; h = r.height;\n      canvas.width = w * dpr; canvas.height = h * dpr;\n      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);\n      barY = Math.max(10, h * 0.1);\n      const usableH = h - barY - bobRadius - 8;\n      const topLen = usableH * 0.5;\n      const lenStep = (usableH - topLen) / Math.max(1, count - 1);\n      const margin = Math.max(bobRadius + 6, w * 0.07);\n      const span = w - margin * 2;\n      pens = [];\n      for (let i = 0; i < count; i++) {\n        const len = topLen + i * lenStep; // i=0 shortest → swings fastest\n        const x = count === 1 ? w / 2 : margin + (span * i) / (count - 1);\n        const swings = minSwings + (count - 1 - i); // shorter = more swings\n        const omega = (2 * Math.PI * swings) / cycle;\n        pens.push({ len, x, omega });\n      }\n    };\n\n    const draw = (t: number) => {\n      if (!start) start = t;\n      const elapsed = reduced ? 0 : (t - start) / 1000;\n      ctx.clearRect(0, 0, w, h);\n      // top bar\n      ctx.strokeStyle = \"rgba(255,255,255,.18)\";\n      ctx.lineWidth = 2;\n      ctx.beginPath();\n      ctx.moveTo(pens[0]?.x ?? 0, barY);\n      ctx.lineTo(pens[pens.length - 1]?.x ?? w, barY);\n      ctx.stroke();\n      for (const p of pens) {\n        const a = reduced ? 0 : amplitude * Math.cos(p.omega * elapsed);\n        const bx = p.x + Math.sin(a) * p.len;\n        const by = barY + Math.cos(a) * p.len;\n        ctx.strokeStyle = \"rgba(124,92,255,.4)\";\n        ctx.lineWidth = 1.5;\n        ctx.beginPath();\n        ctx.moveTo(p.x, barY);\n        ctx.lineTo(bx, by);\n        ctx.stroke();\n        ctx.fillStyle = color;\n        ctx.beginPath();\n        ctx.arc(bx, by, bobRadius, 0, Math.PI * 2);\n        ctx.fill();\n      }\n      if (!reduced) raf = requestAnimationFrame(draw);\n    };\n\n    build();\n    if (reduced) draw(0);\n    else raf = requestAnimationFrame(draw);\n    window.addEventListener(\"resize\", build);\n    return () => {\n      cancelAnimationFrame(raf);\n      window.removeEventListener(\"resize\", build);\n    };\n  }, [count, cycle, amplitude, color, bobRadius, reduced]);\n\n  return <canvas ref={ref} className={cn(\"h-full w-full touch-none\", className)} />;\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "physics",
+    "tags": [
+      "physics",
+      "pendulum",
+      "wave",
+      "canvas"
+    ]
+  }
+}

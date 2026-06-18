@@ -1,0 +1,821 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "reactomega",
+  "version": "1.0.0",
+  "homepage": "https://github.com/Edwson/ReactOmega",
+  "base": "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r",
+  "items": [
+    {
+      "name": "utils",
+      "type": "registry:lib",
+      "title": "cn() utility",
+      "description": "Tailwind class merge helper used by every component.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/utils.ts",
+          "type": "registry:lib",
+          "target": "lib/utils.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-prefers-reduced-motion",
+      "type": "registry:hook",
+      "title": "usePrefersReducedMotion()",
+      "description": "React hook that tracks the user's reduced-motion preference; motion components degrade gracefully when it is true.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "hooks/use-prefers-reduced-motion.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-prefers-reduced-motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "split-text",
+      "type": "registry:component",
+      "title": "Split Text",
+      "description": "Reveals text per character or word on scroll into view with a staggered spring rise. Screen-reader safe via aria-label.",
+      "category": "text",
+      "tags": [
+        "text",
+        "reveal",
+        "scroll",
+        "stagger"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/split-text.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/split-text.tsx"
+        }
+      ]
+    },
+    {
+      "name": "shiny-text",
+      "type": "registry:component",
+      "title": "Shiny Text",
+      "description": "A soft highlight sweeps across text on a loop. Pure CSS, zero dependencies.",
+      "category": "text",
+      "tags": [
+        "text",
+        "shine",
+        "css"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/shiny-text.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/shiny-text.tsx"
+        }
+      ]
+    },
+    {
+      "name": "gradient-text",
+      "type": "registry:component",
+      "title": "Gradient Text",
+      "description": "An animated multi-stop gradient flows through the text. Pure CSS.",
+      "category": "text",
+      "tags": [
+        "text",
+        "gradient",
+        "css"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/gradient-text.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/gradient-text.tsx"
+        }
+      ]
+    },
+    {
+      "name": "count-up",
+      "type": "registry:component",
+      "title": "Count Up",
+      "description": "Rolls a number from a start to a target with ease-out, optionally when scrolled into view. tabular-nums prevents width jitter.",
+      "category": "text",
+      "tags": [
+        "text",
+        "number",
+        "counter",
+        "scroll"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/count-up.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/count-up.tsx"
+        }
+      ]
+    },
+    {
+      "name": "magnetic",
+      "type": "registry:component",
+      "title": "Magnetic",
+      "description": "Wraps any element so it drifts toward the pointer and springs back on leave. Mouse-only, reduced-motion safe.",
+      "category": "interaction",
+      "tags": [
+        "interaction",
+        "pointer",
+        "magnetic",
+        "hover"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/magnetic.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/magnetic.tsx"
+        }
+      ]
+    },
+    {
+      "name": "spotlight-card",
+      "type": "registry:component",
+      "title": "Spotlight Card",
+      "description": "A card with a soft radial spotlight that tracks the pointer and fades on enter/leave.",
+      "category": "interaction",
+      "tags": [
+        "interaction",
+        "card",
+        "spotlight",
+        "pointer"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/spotlight-card.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/spotlight-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tilt-card",
+      "type": "registry:component",
+      "title": "Tilt Card",
+      "description": "A 3D card that tilts toward the pointer with an optional moving glare. Flat and static for reduced-motion users.",
+      "category": "interaction",
+      "tags": [
+        "interaction",
+        "card",
+        "3d",
+        "tilt",
+        "glare"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/tilt-card.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/tilt-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "click-spark",
+      "type": "registry:component",
+      "title": "Click Spark",
+      "description": "Emits a radial spark burst from the exact click point on a self-clearing canvas overlay.",
+      "category": "interaction",
+      "tags": [
+        "interaction",
+        "click",
+        "spark",
+        "canvas"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/click-spark.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/click-spark.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dot-grid",
+      "type": "registry:component",
+      "title": "Dot Grid",
+      "description": "An interactive dot field that lights up and swells around the pointer. A modern, non-cosmic backdrop.",
+      "category": "interaction",
+      "tags": [
+        "interaction",
+        "background",
+        "canvas",
+        "pointer"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/dot-grid.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/dot-grid.tsx"
+        }
+      ]
+    },
+    {
+      "name": "star-border",
+      "type": "registry:component",
+      "title": "Star Border",
+      "description": "Two soft glints travel continuously around the border of any element. Pure CSS.",
+      "category": "components",
+      "tags": [
+        "components",
+        "button",
+        "border",
+        "css"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/star-border.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/star-border.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dock",
+      "type": "registry:component",
+      "title": "Dock",
+      "description": "A macOS-style magnifying dock; items swell based on pointer distance. Renders as a toolbar.",
+      "category": "components",
+      "tags": [
+        "components",
+        "dock",
+        "magnify",
+        "nav"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/dock.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/dock.tsx"
+        }
+      ]
+    },
+    {
+      "name": "marquee",
+      "type": "registry:component",
+      "title": "Marquee",
+      "description": "A seamless infinite scroller (horizontal or vertical) with edge fade and pause-on-hover.",
+      "category": "components",
+      "tags": [
+        "components",
+        "marquee",
+        "scroll",
+        "css"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/marquee.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/marquee.tsx"
+        }
+      ]
+    },
+    {
+      "name": "variable-proximity",
+      "type": "registry:component",
+      "title": "Variable Proximity",
+      "description": "Every letter's variable-font axes (weight, width, optical size, slant, or any custom axis) interpolate based on pointer distance. Fully configurable axes, radius, and falloff curve. Needs a variable font.",
+      "category": "text",
+      "tags": [
+        "text",
+        "variable-font",
+        "proximity",
+        "pointer",
+        "customizable"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/variable-proximity.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/variable-proximity.tsx"
+        }
+      ]
+    },
+    {
+      "name": "magnetic-text",
+      "type": "registry:component",
+      "title": "Magnetic Text",
+      "description": "Every letter is independently magnetic, springing toward the pointer and easing back with real spring physics. Configurable strength, radius, stiffness, damping.",
+      "category": "text",
+      "tags": [
+        "text",
+        "magnetic",
+        "spring",
+        "pointer",
+        "physics"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/magnetic-text.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/magnetic-text.tsx"
+        }
+      ]
+    },
+    {
+      "name": "gravity-text",
+      "type": "registry:component",
+      "title": "Gravity Text",
+      "description": "Letters detach and fall under real gravity, bounce off the floor with friction, then reassemble. Configurable gravity, bounce, friction, scatter, and trigger.",
+      "category": "text",
+      "tags": [
+        "text",
+        "gravity",
+        "physics",
+        "bounce",
+        "interactive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/gravity-text.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/gravity-text.tsx"
+        }
+      ]
+    },
+    {
+      "name": "elastic-text",
+      "type": "registry:component",
+      "title": "Elastic Text",
+      "description": "Letters swell and lift with a springy, overshooting jelly squash-and-stretch as the pointer passes. Configurable stiffness, damping, scale, lift, radius.",
+      "category": "text",
+      "tags": [
+        "text",
+        "elastic",
+        "jelly",
+        "spring",
+        "physics"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/elastic-text.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/elastic-text.tsx"
+        }
+      ]
+    },
+    {
+      "name": "scramble-text",
+      "type": "registry:component",
+      "title": "Scramble Text",
+      "description": "Letters churn through random glyphs and lock in left-to-right like a decoding terminal. Configurable charset, speed, reveal wipe, and trigger.",
+      "category": "text",
+      "tags": [
+        "text",
+        "scramble",
+        "decode",
+        "terminal",
+        "customizable"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/scramble-text.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/scramble-text.tsx"
+        }
+      ]
+    },
+    {
+      "name": "spring-mesh",
+      "type": "registry:component",
+      "title": "Spring Mesh",
+      "description": "An elastic lattice: every node is sprung to rest and coupled to its neighbors, so pressing the pointer sends real waves rippling outward that settle naturally.",
+      "category": "physics",
+      "tags": [
+        "physics",
+        "spring",
+        "mesh",
+        "canvas",
+        "interactive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/spring-mesh.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/spring-mesh.tsx"
+        }
+      ]
+    },
+    {
+      "name": "cloth",
+      "type": "registry:component",
+      "title": "Cloth",
+      "description": "A real verlet-integrated fabric hanging from a pinned top edge under gravity. Grab any point and it folds, swings, and settles like cloth.",
+      "category": "physics",
+      "tags": [
+        "physics",
+        "verlet",
+        "cloth",
+        "drag",
+        "canvas"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/cloth.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/cloth.tsx"
+        }
+      ]
+    },
+    {
+      "name": "metaballs",
+      "type": "registry:component",
+      "title": "Metaballs",
+      "description": "A gooey fluid that flows toward the pointer and merges with surface-tension feel via an SVG goo filter. Configurable count, color, size, and viscosity.",
+      "category": "physics",
+      "tags": [
+        "physics",
+        "fluid",
+        "gooey",
+        "metaballs",
+        "pointer"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/metaballs.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/metaballs.tsx"
+        }
+      ]
+    },
+    {
+      "name": "holographic-card",
+      "type": "registry:component",
+      "title": "Holographic Card",
+      "description": "An iridescent holo-foil card: a rainbow sheen and bright glare track the pointer with a color-dodge blend, over a subtle 3D tilt. Configurable tilt, intensity, and foil colors.",
+      "category": "interaction",
+      "tags": [
+        "interaction",
+        "card",
+        "holographic",
+        "foil",
+        "3d"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/holographic-card.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/holographic-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "text-reveal",
+      "type": "registry:component",
+      "title": "Text Reveal",
+      "description": "Words brighten one after another as the block scrolls through the viewport — a scroll-linked reading spotlight. Configurable dim/lit colors and edge softness.",
+      "category": "text",
+      "tags": [
+        "text",
+        "scroll",
+        "reveal",
+        "reading"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/text-reveal.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/text-reveal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "rope",
+      "type": "registry:component",
+      "title": "Rope",
+      "description": "A verlet-integrated rope hangs from a fixed anchor — grab it, drag it, and watch it swing and settle under gravity.",
+      "category": "physics",
+      "tags": [
+        "physics",
+        "verlet",
+        "canvas",
+        "drag"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/rope.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/rope.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pendulum-wave",
+      "type": "registry:component",
+      "title": "Pendulum Wave",
+      "description": "A row of pendulums with subtly increasing lengths drift in and out of phase to form the classic traveling pendulum-wave pattern.",
+      "category": "physics",
+      "tags": [
+        "physics",
+        "pendulum",
+        "wave",
+        "canvas"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/pendulum-wave.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/pendulum-wave.tsx"
+        }
+      ]
+    },
+    {
+      "name": "newtons-cradle",
+      "type": "registry:component",
+      "title": "Newton's Cradle",
+      "description": "An interactive Newton's cradle — pull an end ball back, release, and momentum transfers through the row to fling the far ball out.",
+      "category": "physics",
+      "tags": [
+        "physics",
+        "collision",
+        "momentum",
+        "canvas"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/newtons-cradle.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/newtons-cradle.tsx"
+        }
+      ]
+    },
+    {
+      "name": "water-ripple",
+      "type": "registry:component",
+      "title": "Water Ripple",
+      "description": "A height-field water surface where pointer input spawns ripples that spread, reflect off edges, and shade from the local height gradient.",
+      "category": "physics",
+      "tags": [
+        "physics",
+        "water",
+        "ripple",
+        "canvas"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/water-ripple.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/water-ripple.tsx"
+        }
+      ]
+    },
+    {
+      "name": "gravity-wells",
+      "type": "registry:component",
+      "title": "Gravity Wells",
+      "description": "Hundreds of particles orbit the pointer as a 1/dist^2 gravity well, leaving luminous trails via per-frame translucent fade.",
+      "category": "physics",
+      "tags": [
+        "physics",
+        "particles",
+        "gravity",
+        "trails"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/gravity-wells.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/gravity-wells.tsx"
+        }
+      ]
+    },
+    {
+      "name": "magnetic-field",
+      "type": "registry:component",
+      "title": "Magnetic Field",
+      "description": "A grid of iron-filing segments that re-orient along a dipole field anchored at the pointer, with length and brightness scaling by proximity.",
+      "category": "physics",
+      "tags": [
+        "physics",
+        "magnetism",
+        "field",
+        "filings"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/magnetic-field.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/magnetic-field.tsx"
+        }
+      ]
+    },
+    {
+      "name": "soft-body",
+      "type": "registry:component",
+      "title": "Soft Body",
+      "description": "A poke-able jelly blob held in a circle by perimeter, radius, and pressure springs that wobbles and recovers when you squish it with the pointer.",
+      "category": "physics",
+      "tags": [
+        "physics",
+        "soft-body",
+        "springs",
+        "canvas"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/soft-body.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/soft-body.tsx"
+        }
+      ]
+    },
+    {
+      "name": "plucked-string",
+      "type": "registry:component",
+      "title": "Plucked String",
+      "description": "A string pinned at both ends that you grab and pluck, then watch vibrate with a realistic decaying wave driven by neighbor-averaging physics.",
+      "category": "physics",
+      "tags": [
+        "physics",
+        "string",
+        "wave",
+        "canvas"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/plucked-string.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/plucked-string.tsx"
+        }
+      ]
+    },
+    {
+      "name": "falling-sand",
+      "type": "registry:component",
+      "title": "Falling Sand",
+      "description": "A falling-sand cellular automaton where dragging the pointer pours colored grains that fall and slide diagonally into realistic piling mounds.",
+      "category": "physics",
+      "tags": [
+        "physics",
+        "cellular-automaton",
+        "sand",
+        "canvas"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/falling-sand.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/falling-sand.tsx"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "gradient-text",
+  "type": "registry:component",
+  "title": "Gradient Text",
+  "description": "An animated multi-stop gradient flows through the text. Pure CSS.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/gradient-text.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/gradient-text.tsx",
+      "content": "\"use client\";\n\nimport { cn } from \"@/lib/utils\";\n\nexport interface GradientTextProps {\n  children: React.ReactNode;\n  className?: string;\n  /** Gradient stop colors (looped). @default indigo → violet → pink → indigo */\n  colors?: string[];\n  /** Seconds per loop. @default 6 */\n  speed?: number;\n}\n\n/**\n * GradientText — an animated multi-stop gradient flows through the text.\n * Pure CSS, no dependencies. Honors reduced-motion automatically.\n */\nexport function GradientText({\n  children,\n  className,\n  colors = [\"#6366f1\", \"#a855f7\", \"#ec4899\", \"#6366f1\"],\n  speed = 6,\n}: GradientTextProps) {\n  return (\n    <span\n      className={cn(\"ro-grad inline-block bg-clip-text text-transparent\", className)}\n      style={{\n        backgroundImage: `linear-gradient(to right, ${colors.join(\", \")})`,\n        backgroundSize: \"300% 100%\",\n        WebkitBackgroundClip: \"text\",\n        animation: `ro-grad ${speed}s linear infinite`,\n      }}\n    >\n      {children}\n      <style>{`@keyframes ro-grad{to{background-position:300% 0}}@media(prefers-reduced-motion:reduce){.ro-grad{animation:none!important}}`}</style>\n    </span>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "text",
+    "tags": [
+      "text",
+      "gradient",
+      "css"
+    ]
+  }
+}

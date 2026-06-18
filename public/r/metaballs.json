@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "metaballs",
+  "type": "registry:component",
+  "title": "Metaballs",
+  "description": "A gooey fluid that flows toward the pointer and merges with surface-tension feel via an SVG goo filter. Configurable count, color, size, and viscosity.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/metaballs.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/metaballs.tsx",
+      "content": "\"use client\";\n\nimport { useEffect, useId, useRef } from \"react\";\nimport { cn } from \"@/lib/utils\";\nimport { usePrefersReducedMotion } from \"@/hooks/use-prefers-reduced-motion\";\n\nexport interface MetaballsProps {\n  className?: string;\n  /** Number of blobs. @default 7 */\n  count?: number;\n  /** Fluid color. @default \"#7c5cff\" */\n  color?: string;\n  /** Base blob diameter in px. @default 90 */\n  size?: number;\n  /** Flow lag, 0..1 — lower feels thicker. @default 0.08 */\n  viscosity?: number;\n  /** A blob that sticks to the pointer. @default true */\n  pointerBlob?: boolean;\n}\n\n/**\n * Metaballs — a gooey fluid that flows toward the pointer and merges with real\n * surface-tension feel (an SVG goo filter). Blobs orbit a center that eases after\n * the cursor with a configurable viscosity. Settles into a still cluster for\n * reduced-motion users.\n */\nexport function Metaballs({\n  className,\n  count = 7,\n  color = \"#7c5cff\",\n  size = 90,\n  viscosity = 0.08,\n  pointerBlob = true,\n}: MetaballsProps) {\n  const wrapRef = useRef<HTMLDivElement>(null);\n  const blobRefs = useRef<(HTMLDivElement | null)[]>([]);\n  const reduced = usePrefersReducedMotion();\n  const filterId = \"ro-goo-\" + useId().replace(/[^a-zA-Z0-9-]/g, \"\");\n\n  useEffect(() => {\n    const wrap = wrapRef.current;\n    if (!wrap) return;\n    let w = 0, h = 0;\n    const field = { x: 0, y: 0, tx: 0, ty: 0 };\n    const blobs = blobRefs.current.filter(Boolean) as HTMLDivElement[];\n    const seeds = blobs.map((_, i) => ({\n      angle: (i / blobs.length) * Math.PI * 2,\n      speed: 0.005 + Math.random() * 0.012,\n      orbit: 0.12 + Math.random() * 0.22,\n      x: 0, y: 0,\n      r: (0.6 + Math.random() * 0.7) * (size / 2),\n    }));\n    let raf = 0;\n    let hasPointer = false;\n\n    const resize = () => {\n      const r = wrap.getBoundingClientRect();\n      w = r.width; h = r.height;\n      field.x = field.tx = w / 2;\n      field.y = field.ty = h / 2;\n    };\n    resize();\n\n    const place = () => {\n      const minDim = Math.min(w, h);\n      blobs.forEach((el, i) => {\n        const s = seeds[i];\n        const tx = field.x + Math.cos(s.angle) * s.orbit * minDim;\n        const ty = field.y + Math.sin(s.angle) * s.orbit * minDim;\n        s.x += (tx - s.x) * (reduced ? 1 : Math.max(0.02, viscosity));\n        s.y += (ty - s.y) * (reduced ? 1 : Math.max(0.02, viscosity));\n        el.style.width = el.style.height = `${s.r * 2}px`;\n        el.style.transform = `translate(${(s.x - s.r).toFixed(1)}px, ${(s.y - s.r).toFixed(1)}px)`;\n      });\n      // pointer blob = blob 0 sticks closer to the cursor\n      if (pointerBlob && blobs[0] && hasPointer) {\n        const s = seeds[0];\n        s.x += (field.tx - s.x) * (reduced ? 1 : 0.25);\n        s.y += (field.ty - s.y) * (reduced ? 1 : 0.25);\n        blobs[0].style.transform = `translate(${(s.x - s.r).toFixed(1)}px, ${(s.y - s.r).toFixed(1)}px)`;\n      }\n    };\n\n    const step = () => {\n      field.x += (field.tx - field.x) * viscosity;\n      field.y += (field.ty - field.y) * viscosity;\n      seeds.forEach((s) => (s.angle += s.speed));\n      place();\n      raf = requestAnimationFrame(step);\n    };\n\n    const onMove = (e: PointerEvent) => {\n      const r = wrap.getBoundingClientRect();\n      field.tx = e.clientX - r.left;\n      field.ty = e.clientY - r.top;\n      hasPointer = true;\n    };\n    const onLeave = () => { field.tx = w / 2; field.ty = h / 2; hasPointer = false; };\n\n    if (reduced) {\n      place();\n    } else {\n      raf = requestAnimationFrame(step);\n      wrap.addEventListener(\"pointermove\", onMove);\n      wrap.addEventListener(\"pointerleave\", onLeave);\n    }\n    window.addEventListener(\"resize\", resize);\n    return () => {\n      cancelAnimationFrame(raf);\n      window.removeEventListener(\"resize\", resize);\n      wrap.removeEventListener(\"pointermove\", onMove);\n      wrap.removeEventListener(\"pointerleave\", onLeave);\n    };\n  }, [count, size, viscosity, pointerBlob, reduced]);\n\n  return (\n    <div ref={wrapRef} className={cn(\"relative h-full w-full overflow-hidden\", className)}>\n      <svg className=\"absolute h-0 w-0\" aria-hidden>\n        <defs>\n          <filter id={filterId}>\n            <feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"12\" result=\"blur\" />\n            <feColorMatrix in=\"blur\" mode=\"matrix\" values=\"1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10\" />\n          </filter>\n        </defs>\n      </svg>\n      <div className=\"absolute inset-0\" style={{ filter: `url(#${filterId})` }}>\n        {Array.from({ length: count }).map((_, i) => (\n          <div\n            key={i}\n            ref={(el) => {\n              blobRefs.current[i] = el;\n            }}\n            className=\"absolute left-0 top-0 rounded-full will-change-transform\"\n            style={{ background: color }}\n          />\n        ))}\n      </div>\n    </div>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "physics",
+    "tags": [
+      "physics",
+      "fluid",
+      "gooey",
+      "metaballs",
+      "pointer"
+    ]
+  }
+}

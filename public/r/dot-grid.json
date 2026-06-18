@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dot-grid",
+  "type": "registry:component",
+  "title": "Dot Grid",
+  "description": "An interactive dot field that lights up and swells around the pointer. A modern, non-cosmic backdrop.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/dot-grid.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/dot-grid.tsx",
+      "content": "\"use client\";\n\nimport { useEffect, useRef } from \"react\";\nimport { cn } from \"@/lib/utils\";\nimport { usePrefersReducedMotion } from \"@/hooks/use-prefers-reduced-motion\";\n\nexport interface DotGridProps {\n  className?: string;\n  /** Gap between dots in px. @default 28 */\n  gap?: number;\n  /** Base dot radius in px. @default 2 */\n  dotSize?: number;\n  /** Idle dot color. @default \"rgba(255,255,255,.18)\" */\n  color?: string;\n  /** Color of dots near the pointer. @default \"#7c5cff\" */\n  active?: string;\n  /** Pointer influence radius in px. @default 140 */\n  radius?: number;\n}\n\n/**\n * DotGrid — an interactive dot field that lights up and swells around the\n * pointer. A modern, non-cosmic backdrop. For reduced-motion users it renders\n * a single static grid with no animation loop.\n */\nexport function DotGrid({\n  className,\n  gap = 28,\n  dotSize = 2,\n  color = \"rgba(255,255,255,.18)\",\n  active = \"#7c5cff\",\n  radius = 140,\n}: DotGridProps) {\n  const ref = useRef<HTMLCanvasElement>(null);\n  const reduced = usePrefersReducedMotion();\n\n  useEffect(() => {\n    const canvas = ref.current;\n    if (!canvas) return;\n    const ctx = canvas.getContext(\"2d\");\n    if (!ctx) return;\n    let raf = 0;\n    let w = 0;\n    let h = 0;\n    const dpr = Math.min(window.devicePixelRatio || 1, 2);\n    const mouse = { x: -9999, y: -9999 };\n\n    const resize = () => {\n      const r = canvas.getBoundingClientRect();\n      w = r.width;\n      h = r.height;\n      canvas.width = w * dpr;\n      canvas.height = h * dpr;\n      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);\n    };\n\n    const draw = () => {\n      ctx.clearRect(0, 0, w, h);\n      for (let x = gap / 2; x < w; x += gap) {\n        for (let y = gap / 2; y < h; y += gap) {\n          const t = reduced ? 0 : Math.max(0, 1 - Math.hypot(x - mouse.x, y - mouse.y) / radius);\n          ctx.beginPath();\n          ctx.fillStyle = t > 0 ? active : color;\n          ctx.globalAlpha = 0.35 + t * 0.65;\n          ctx.arc(x, y, dotSize + t * 2, 0, Math.PI * 2);\n          ctx.fill();\n        }\n      }\n      ctx.globalAlpha = 1;\n      if (!reduced) raf = requestAnimationFrame(draw);\n    };\n\n    const onMove = (e: PointerEvent) => {\n      const r = canvas.getBoundingClientRect();\n      mouse.x = e.clientX - r.left;\n      mouse.y = e.clientY - r.top;\n    };\n    const onLeave = () => {\n      mouse.x = -9999;\n      mouse.y = -9999;\n    };\n\n    resize();\n    draw();\n    window.addEventListener(\"resize\", resize);\n    canvas.addEventListener(\"pointermove\", onMove);\n    canvas.addEventListener(\"pointerleave\", onLeave);\n    return () => {\n      cancelAnimationFrame(raf);\n      window.removeEventListener(\"resize\", resize);\n      canvas.removeEventListener(\"pointermove\", onMove);\n      canvas.removeEventListener(\"pointerleave\", onLeave);\n    };\n  }, [gap, dotSize, color, active, radius, reduced]);\n\n  return <canvas ref={ref} className={cn(\"h-full w-full\", className)} />;\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "interaction",
+    "tags": [
+      "interaction",
+      "background",
+      "canvas",
+      "pointer"
+    ]
+  }
+}

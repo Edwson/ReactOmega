@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  registry:
+    name: Registry · Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Syntax-check CLI, MCP, scripts
+        run: |
+          node --check cli/index.mjs
+          node --check mcp/server.mjs
+          node --check mcp/registry-core.mjs
+          node --check scripts/build-registry.mjs
+          node --check scripts/test-registry.mjs
+
+      - name: Components compile (esbuild, no deps needed)
+        run: |
+          npx --yes esbuild@0.28.1 registry/reactomega/ui/*.tsx registry/reactomega/lib/*.ts registry/reactomega/hooks/*.ts --outdir=/tmp/ro-build --jsx=automatic
+
+      - name: Registry is in sync (no drift)
+        run: |
+          node scripts/build-registry.mjs
+          git diff --exit-code registry.json public/r llms.txt
+
+      - name: Registry contract test (no SDK)
+        run: node scripts/test-registry.mjs
+
+      - name: Install MCP deps + run end-to-end MCP test
+        run: |
+          npm install @modelcontextprotocol/sdk@^1 zod@^3 --no-save --no-audit --no-fund --no-workspaces
+          node mcp/test-mcp.mjs

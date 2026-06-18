@@ -1,0 +1,28 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "marquee",
+  "type": "registry:component",
+  "title": "Marquee",
+  "description": "A seamless infinite scroller (horizontal or vertical) with edge fade and pause-on-hover.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/marquee.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/marquee.tsx",
+      "content": "\"use client\";\n\nimport { cn } from \"@/lib/utils\";\n\nexport interface MarqueeProps {\n  children: React.ReactNode;\n  className?: string;\n  /** Seconds per loop. @default 20 */\n  speed?: number;\n  /** Reverse the direction. @default false */\n  reverse?: boolean;\n  /** Scroll vertically instead of horizontally. @default false */\n  vertical?: boolean;\n  /** Pause while hovered. @default true */\n  pauseOnHover?: boolean;\n  /** Fade the leading/trailing edges. @default true */\n  fade?: boolean;\n}\n\n/**\n * Marquee — a seamless infinite scroller (horizontal or vertical) with edge\n * fade and pause-on-hover. Two duplicated tracks make the loop seamless.\n * Reduced-motion users get a static, non-scrolling row.\n */\nexport function Marquee({\n  children,\n  className,\n  speed = 20,\n  reverse = false,\n  vertical = false,\n  pauseOnHover = true,\n  fade = true,\n}: MarqueeProps) {\n  const mask = vertical\n    ? \"linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent)\"\n    : \"linear-gradient(to right, transparent, #000 12%, #000 88%, transparent)\";\n\n  return (\n    <div\n      className={cn(\"ro-marquee group relative flex overflow-hidden\", vertical ? \"flex-col\" : \"flex-row\", className)}\n      style={fade ? { maskImage: mask, WebkitMaskImage: mask } : undefined}\n    >\n      {[0, 1].map((k) => (\n        <div\n          key={k}\n          aria-hidden={k === 1}\n          className={cn(\n            \"ro-marquee-track flex shrink-0 items-center gap-4\",\n            vertical ? \"flex-col\" : \"flex-row\",\n            pauseOnHover && \"group-hover:[animation-play-state:paused]\",\n          )}\n          style={{\n            animation: `${vertical ? \"ro-marq-y\" : \"ro-marq-x\"} ${speed}s linear infinite`,\n            animationDirection: reverse ? \"reverse\" : \"normal\",\n            paddingInlineEnd: vertical ? undefined : \"1rem\",\n            paddingBlockEnd: vertical ? \"1rem\" : undefined,\n          }}\n        >\n          {children}\n        </div>\n      ))}\n      <style>{`@keyframes ro-marq-x{to{transform:translateX(-100%)}}@keyframes ro-marq-y{to{transform:translateY(-100%)}}@media(prefers-reduced-motion:reduce){.ro-marquee-track{animation:none!important}}`}</style>\n    </div>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "components",
+    "tags": [
+      "components",
+      "marquee",
+      "scroll",
+      "css"
+    ]
+  }
+}

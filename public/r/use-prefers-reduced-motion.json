@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-prefers-reduced-motion",
+  "type": "registry:hook",
+  "title": "usePrefersReducedMotion()",
+  "description": "React hook that tracks the user's reduced-motion preference; motion components degrade gracefully when it is true.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "hooks/use-prefers-reduced-motion.ts",
+      "type": "registry:hook",
+      "target": "hooks/use-prefers-reduced-motion.ts",
+      "content": "\"use client\";\n\nimport { useEffect, useState } from \"react\";\n\n/**\n * Returns `true` when the user has requested reduced motion.\n * Every ReactOmega motion component honors this and degrades to a calm,\n * non-animated state — accessibility is a contract, not an afterthought.\n */\nexport function usePrefersReducedMotion(): boolean {\n  const [reduced, setReduced] = useState(false);\n\n  useEffect(() => {\n    if (typeof window === \"undefined\" || !window.matchMedia) return;\n    const mq = window.matchMedia(\"(prefers-reduced-motion: reduce)\");\n    const update = () => setReduced(mq.matches);\n    update();\n    mq.addEventListener?.(\"change\", update);\n    return () => mq.removeEventListener?.(\"change\", update);\n  }, []);\n\n  return reduced;\n}\n"
+    }
+  ]
+}

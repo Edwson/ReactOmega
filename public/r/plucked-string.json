@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "plucked-string",
+  "type": "registry:component",
+  "title": "Plucked String",
+  "description": "A string pinned at both ends that you grab and pluck, then watch vibrate with a realistic decaying wave driven by neighbor-averaging physics.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/plucked-string.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/plucked-string.tsx",
+      "content": "\"use client\";\n\nimport { useEffect, useRef } from \"react\";\nimport { cn } from \"@/lib/utils\";\nimport { usePrefersReducedMotion } from \"@/hooks/use-prefers-reduced-motion\";\n\nexport interface PluckedStringProps {\n  className?: string;\n  /** Number of points along the string. @default 90 */\n  points?: number;\n  /** Wave restoring strength, 0..1. @default 0.4 */\n  tension?: number;\n  /** Velocity damping per frame (closer to 1 = longer sustain). @default 0.995 */\n  damping?: number;\n  /** String color. @default \"#22d3ee\" */\n  color?: string;\n  /** Line thickness in px. @default 3 */\n  thickness?: number;\n}\n\n/**\n * PluckedString — a string pinned at both ends. Press down near it to grab the\n * nearest point, drag to pluck, release to let it vibrate: each interior point\n * accelerates toward the average of its neighbors, producing a realistic decaying\n * wave. Renders a straight horizontal string when reduced motion is requested.\n */\nexport function PluckedString({\n  className,\n  points = 90,\n  tension = 0.4,\n  damping = 0.995,\n  color = \"#22d3ee\",\n  thickness = 3,\n}: PluckedStringProps) {\n  const ref = useRef<HTMLCanvasElement>(null);\n  const reduced = usePrefersReducedMotion();\n\n  useEffect(() => {\n    const canvas = ref.current;\n    if (!canvas) return;\n    const ctx = canvas.getContext(\"2d\");\n    if (!ctx) return;\n    const dpr = Math.min(window.devicePixelRatio || 1, 2);\n    const n = Math.max(8, Math.min(200, Math.floor(points)));\n    let w = 0, h = 0, baseY = 0, step = 0;\n    let pos: number[] = [];\n    let vel: number[] = [];\n    let grab = -1;\n    let raf = 0;\n\n    const build = () => {\n      const r = canvas.getBoundingClientRect();\n      w = r.width; h = r.height;\n      canvas.width = w * dpr; canvas.height = h * dpr;\n      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);\n      baseY = h / 2;\n      step = w / (n - 1);\n      pos = new Array(n).fill(baseY);\n      vel = new Array(n).fill(0);\n      grab = -1;\n    };\n\n    const physics = () => {\n      for (let i = 1; i < n - 1; i++) {\n        if (i === grab) continue;\n        const target = (pos[i - 1] + pos[i + 1]) / 2;\n        vel[i] += (target - pos[i]) * tension;\n        vel[i] *= damping;\n      }\n      for (let i = 1; i < n - 1; i++) {\n        if (i === grab) continue;\n        pos[i] += vel[i];\n      }\n      pos[0] = baseY; pos[n - 1] = baseY;\n    };\n\n    const draw = () => {\n      ctx.clearRect(0, 0, w, h);\n      if (!reduced) physics();\n      ctx.lineJoin = \"round\";\n      ctx.lineCap = \"round\";\n      // soft glow underlay\n      ctx.shadowColor = color;\n      ctx.shadowBlur = 12;\n      ctx.strokeStyle = color;\n      ctx.lineWidth = thickness;\n      ctx.beginPath();\n      ctx.moveTo(0, pos[0]);\n      for (let i = 1; i < n; i++) {\n        const x = i * step;\n        const px = (i - 1) * step;\n        const cpx = (px + x) / 2;\n        ctx.quadraticCurveTo(px, pos[i - 1], cpx, (pos[i - 1] + pos[i]) / 2);\n      }\n      ctx.lineTo(w, pos[n - 1]);\n      ctx.stroke();\n      ctx.shadowBlur = 0;\n      if (!reduced) raf = requestAnimationFrame(draw);\n    };\n\n    const idxFromX = (x: number) => Math.max(0, Math.min(n - 1, Math.round(x / step)));\n\n    const onDown = (e: PointerEvent) => {\n      if (reduced) return;\n      const r = canvas.getBoundingClientRect();\n      const x = e.clientX - r.left, y = e.clientY - r.top;\n      const i = idxFromX(x);\n      if (i <= 0 || i >= n - 1) return;\n      if (Math.abs(y - pos[i]) < 60) { grab = i; pos[i] = y; vel[i] = 0; canvas.setPointerCapture?.(e.pointerId); }\n    };\n    const onMove = (e: PointerEvent) => {\n      if (grab < 0) return;\n      const r = canvas.getBoundingClientRect();\n      pos[grab] = e.clientY - r.top;\n      vel[grab] = 0;\n    };\n    const onUp = () => { grab = -1; };\n\n    build();\n    draw();\n    window.addEventListener(\"resize\", build);\n    canvas.addEventListener(\"pointerdown\", onDown);\n    canvas.addEventListener(\"pointermove\", onMove);\n    canvas.addEventListener(\"pointerup\", onUp);\n    canvas.addEventListener(\"pointerleave\", onUp);\n    return () => {\n      cancelAnimationFrame(raf);\n      window.removeEventListener(\"resize\", build);\n      canvas.removeEventListener(\"pointerdown\", onDown);\n      canvas.removeEventListener(\"pointermove\", onMove);\n      canvas.removeEventListener(\"pointerup\", onUp);\n      canvas.removeEventListener(\"pointerleave\", onUp);\n    };\n  }, [points, tension, damping, color, thickness, reduced]);\n\n  return <canvas ref={ref} className={cn(\"h-full w-full touch-none\", className)} />;\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "physics",
+    "tags": [
+      "physics",
+      "string",
+      "wave",
+      "canvas"
+    ]
+  }
+}
