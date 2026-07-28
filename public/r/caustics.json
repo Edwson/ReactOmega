@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "caustics",
+  "type": "registry:component",
+  "title": "Caustics",
+  "description": "Underwater light caustics: a coordinate folded back on itself several times, each pass accumulating reciprocal distance, then gamma-crushed so only the focus filaments survive. The pointer disturbs the water above.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-shader.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/caustics.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/caustics.tsx",
+      "content": "\"use client\";\n\nimport { useMemo } from \"react\";\nimport { cn } from \"@/lib/utils\";\nimport { useShader, hexToRgb } from \"@/hooks/use-shader\";\n\nexport interface CausticsProps {\n  className?: string;\n  /** Colour of the focused light. @default \"#a9c4ff\" */\n  color?: string;\n  /** Colour of the unlit floor. @default \"#06060a\" */\n  background?: string;\n  /** Brightness of the filaments. @default 1 */\n  intensity?: number;\n  /** Zoom of the caustic web — higher packs more cells in. @default 1.35 */\n  scale?: number;\n  /** Speed of the water above. @default 1 */\n  speed?: number;\n}\n\n/**\n * Caustics — the net of focused light that a rippling water surface throws onto\n * the floor beneath it.\n *\n * Built the way caustics are actually cheap to fake: a coordinate is folded\n * back on itself five times, each pass displacing it by sines and cosines of\n * its own components at a different temporal rate, and each pass accumulates\n * the reciprocal distance to that folded position. Summing inverse distances\n * is what concentrates energy into thin bright filaments where many folds\n * happen to land together — the same reason real caustics are the envelope of\n * refracted rays. The accumulation is then gamma-crushed hard so the mid-tones\n * fall away and only the focus lines survive, and the crush exponent differs\n * slightly per channel so the filaments carry a faint prismatic edge. The\n * pointer drops a decaying radial phase wave into the surface, which bends the\n * web outward around the cursor.\n */\nexport function Caustics({\n  className,\n  color = \"#a9c4ff\",\n  background = \"#06060a\",\n  intensity = 1,\n  scale = 1.35,\n  speed = 1,\n}: CausticsProps) {\n  const uniforms = useMemo(\n    () => ({\n      uColor: hexToRgb(color),\n      uBg: hexToRgb(background),\n      uIntensity: intensity,\n      uScale: scale,\n    }),\n    [color, background, intensity, scale],\n  );\n\n  const { ref, supported } = useShader({\n    speed,\n    uniforms,\n    fragment: FRAG,\n  });\n\n  if (!supported) {\n    return (\n      <div\n        className={cn(\"h-full w-full\", className)}\n        aria-hidden\n        style={{\n          background: `radial-gradient(90% 70% at 50% 30%, ${color}33 0%, transparent 60%), ${background}`,\n        }}\n      />\n    );\n  }\n\n  return <canvas ref={ref} className={cn(\"block h-full w-full\", className)} aria-hidden />;\n}\n\nconst FRAG = /* glsl */ `\nfloat hash(vec2 p) {\n  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);\n}\n\nvoid main() {\n  float m = min(uResolution.x, uResolution.y);\n  vec2 uv = (gl_FragCoord.xy - 0.5 * uResolution) / m;\n  vec2 pc = (uPointer.xy - 0.5 * uResolution) / m;\n\n  float t = uTime * 0.42 + 23.0;\n  // The fold works on a large offset coordinate — at small |p| the reciprocal\n  // distance saturates on every pass and the field flattens to a single tone.\n  vec2 p = uv * uScale * 6.2831853 - 250.0;\n\n  // A stone in the water above: a radial phase wave that displaces the sample\n  // point, so the whole web refracts outward from the cursor rather than just\n  // getting brighter under it.\n  vec2 rel = uv - pc;\n  float r = length(rel);\n  float ripple = uPointer.z * sin(r * 24.0 - uTime * 4.6) * exp(-r * 4.5) * 0.85;\n  p += normalize(rel + 1e-5) * ripple;\n\n  // Fold the coordinate into itself; accumulate inverse distance each pass.\n  vec2 q = p;\n  float c = 1.0;\n  const float INTEN = 0.0045;\n  for (int n = 0; n < 5; n++) {\n    float tn = t * (1.0 - (3.2 / float(n + 1)));\n    q = p + vec2(cos(tn - q.x) + sin(tn + q.y), sin(tn - q.y) + cos(tn + q.x));\n    float sx = sin(q.x + tn) / INTEN;\n    float sy = cos(q.y + tn) / INTEN;\n    c += 1.0 / length(vec2(p.x / (sx + 1e-4), p.y / (sy + 1e-4)));\n  }\n  c = 1.16 - pow(c / 5.0, 1.42);\n  // Clamp before the gamma crush: c is an unbounded reciprocal-distance sum,\n  // and pow(a, 7.9) on anything above 1.0 runs away to pure white.\n  float a = clamp(abs(c), 0.0, 1.0);\n\n  // Slightly different crush per channel: blue filaments end up marginally\n  // wider than red, which reads as dispersion along every focus line.\n  vec3 web = vec3(pow(a, 9.4), pow(a, 8.6), pow(a, 7.6)) * uIntensity;\n\n  vec3 col = uBg + uColor * web * 1.45;\n  col += uColor * 0.07 * pow(a, 3.4) * uIntensity;   // the broad underwater wash\n  col += uColor * uPointer.z * 0.15 * exp(-r * 5.5); // glow where the stone fell\n\n  col = 1.0 - exp(-col * 1.9);          // tone map — filaments stay bright, nothing clips\n  col *= 1.0 - 0.34 * dot(uv, uv);\n  col += (hash(gl_FragCoord.xy + t) - 0.5) * 0.012;\n\n  fragColor = vec4(max(col, 0.0), 1.0);\n}\n`;\n"
+    }
+  ],
+  "meta": {
+    "category": "shader",
+    "tags": [
+      "shader",
+      "webgl",
+      "water",
+      "caustics",
+      "background"
+    ]
+  }
+}
