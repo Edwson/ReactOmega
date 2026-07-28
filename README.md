@@ -4,7 +4,7 @@
 **motion & interaction** components you copy into your project — installable in one line by
 **humans _and_ AI agents**.
 
-![Version](https://img.shields.io/badge/version-1.0.0-7c5cff)
+![Version](https://img.shields.io/badge/version-1.1.0-7c5cff)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Deps](https://img.shields.io/badge/runtime%20deps-none-3c873a)
 ![A11y](https://img.shields.io/badge/reduced--motion-safe-22d3ee)
@@ -60,7 +60,7 @@ npx -y github:Edwson/ReactOmega list --category text  # filter by category
 
 ## Run the playground
 
-**Live:** **https://edwson.github.io/ReactOmega/** — every one of the 31 components rendered live,
+**Live:** **https://edwson.github.io/ReactOmega/** — every one of the 51 components rendered live,
 with a copy-paste install command on each card. The playground source lives in [`web/`](web)
 (Next.js + Tailwind). To run it locally:
 
@@ -70,23 +70,40 @@ npm install
 npm run dev        # → http://localhost:3000
 ```
 
-## Components (v1.0) — 31
+## Components (v1.1) — 51
 
-**Text Animations** (novel + deeply customizable kinetic typography)
+**Text Animations** (10) — novel + deeply customizable kinetic typography
 `split-text` · `shiny-text` · `gradient-text` · `count-up` · `variable-proximity` (per-letter
 variable-font axes by pointer distance) · `magnetic-text` (each letter springs to the pointer) ·
 `gravity-text` (letters fall, bounce & reassemble with real gravity) · `elastic-text` (per-letter
 jelly squash/stretch) · `scramble-text` (configurable decode) · `text-reveal` (scroll-linked
 word-by-word brightening)
 
-**Interaction & Motion**
+**Interaction & Motion** (6)
 `magnetic` · `spotlight-card` · `tilt-card` · `holographic-card` (iridescent foil + 3D tilt) ·
 `click-spark` · `dot-grid`
 
-**Components**
-`star-border` · `dock` · `marquee`
+**Cursor & Pointer** (5) — *new in 1.1*
+`inertia-cursor` (exact dot + spring-lagged ring, difference-blended) · `elastic-cursor` (stretches
+along its velocity vector, area conserved) · `image-trail` (distance-thresholded, so spacing is even
+at any speed) · `pixel-trail` (sub-cell path walking — a fast flick still lights a continuous line) ·
+`crosshair` (point-to-rectangle snapping + live coordinate readout)
 
-**Physics & Art** (real physics — tactile, designed, never cosmic) — 12
+**Scroll-Driven** (4) — *new in 1.1*
+`scroll-stack` (sticky deck, continuous depth) · `scroll-velocity` (skews with scroll velocity,
+frame-rate independent) · `parallax-layers` (progress normalised to the section's own centre) ·
+`scroll-scene` (pins a section, exposes 0→1 scrub progress via render prop, CSS variable, or callback)
+
+**Shaders & Light** (6) — *new in 1.1* — **hand-written GLSL on raw WebGL2, still zero deps**
+`liquid-metal` (domain-warped FBM, normals from finite differences, swept polish bands) ·
+`thin-film` (two-beam interference at three wavelengths — real fringe order, not a hue rotation) ·
+`caustics` (folded coordinates accumulating reciprocal distance) · `halftone-gradient` (angled
+per-channel dot screens with √-corrected dot area, or a computed 4×4 Bayer matrix) ·
+`volumetric-rays` (radial scattering integral, decay normalised by sample count) · `curl-flow`
+(FBM as a stream function; velocity is the perpendicular of its gradient, so the field is
+divergence-free by construction)
+
+**Physics & Art** (12) — real physics — tactile, designed, never cosmic
 `spring-mesh` (press an elastic lattice, waves ripple & settle) · `cloth` (a verlet fabric you grab
 & wave) · `metaballs` (gooey fluid that merges around the pointer) · `rope` (a verlet rope you grab
 & swing) · `pendulum-wave` (staggered-length pendulums drift in & out of phase) · `newtons-cradle`
@@ -95,6 +112,28 @@ reflects) · `gravity-wells` (particles orbit the pointer with luminous trails) 
 (iron-filings re-orient along a pointer dipole) · `soft-body` (a poke-able jelly blob) ·
 `plucked-string` (pluck it, it vibrates with a decaying wave) · `falling-sand` (pour colored grains
 that pile into mounds)
+
+**Components** (8)
+`star-border` · `dock` · `marquee` · `card-swap` (3D deck, every slot a pure function of depth) ·
+`gooey-nav` (indicator stretches in flight, fused by an SVG goo filter) · `bento-grid` (one pointer
+listener for the whole grid, shared with tiles as inherited custom properties) · `elastic-slider`
+(exponentially damped overshoot, full `role="slider"` keyboard contract) · `circular-gallery`
+(drag converted through arc length, so tracking is 1:1 at any radius)
+
+### Shaders without a shader library
+
+The six shader components share a `useShader()` primitive — a raw WebGL2 runtime in ~290 lines
+with **no `ogl`, no `three`, and no new dependencies**. It draws one full-screen triangle from
+`gl_VertexID` (nothing to allocate, nothing to leak) and owns DPR-clamped sizing, suspension while
+off-screen, pause on tab blur, context-loss recovery, eased pointer input, and the single still
+frame reduced-motion users get. When WebGL2 is unavailable it reports `supported: false` so the
+component renders a CSS fallback rather than a blank box.
+
+```tsx
+import { LiquidMetal } from "@/components/reactomega/liquid-metal";
+
+<div className="h-[60vh]"><LiquidMetal tint="#c9d4ff" /></div>;
+```
 
 Each ships a structured contract in the registry: description, tags, npm + primitive
 dependencies, and the source. Browse [`registry.json`](registry.json) or any

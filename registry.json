@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "reactomega",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "homepage": "https://github.com/Edwson/ReactOmega",
   "base": "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r",
   "items": [
@@ -35,6 +35,23 @@
           "path": "hooks/use-prefers-reduced-motion.ts",
           "type": "registry:hook",
           "target": "hooks/use-prefers-reduced-motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-shader",
+      "type": "registry:hook",
+      "title": "useShader()",
+      "description": "A dependency-free raw WebGL2 runtime for full-screen fragment shaders: DPR-clamped sizing, suspension while off-screen, context-loss recovery, eased pointer input, auto-generated uniform declarations, and a single still frame for reduced-motion users.",
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "hooks/use-shader.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-shader.ts"
         }
       ]
     },
@@ -814,6 +831,523 @@
           "path": "components/reactomega/falling-sand.tsx",
           "type": "registry:component",
           "target": "components/reactomega/falling-sand.tsx"
+        }
+      ]
+    },
+    {
+      "name": "liquid-metal",
+      "type": "registry:component",
+      "title": "Liquid Metal",
+      "description": "A molten chrome surface that flows, catches light and dents away from the pointer. Two rounds of domain-warped FBM drive a height field; the normal is taken from finite differences each frame and lit with diffuse, specular and swept polish bands.",
+      "category": "shader",
+      "tags": [
+        "shader",
+        "webgl",
+        "metal",
+        "background",
+        "pointer"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-shader.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/liquid-metal.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/liquid-metal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "thin-film",
+      "type": "registry:component",
+      "title": "Thin Film",
+      "description": "Iridescent soap-film sheen computed from real thin-film interference: phase is evaluated at three representative RGB wavelengths over a wobbling thickness field, so the fringe order is physical rather than a hue rotation. The pointer thins the film and shifts the bands.",
+      "category": "shader",
+      "tags": [
+        "shader",
+        "webgl",
+        "iridescent",
+        "interference",
+        "background"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-shader.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/thin-film.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/thin-film.tsx"
+        }
+      ]
+    },
+    {
+      "name": "caustics",
+      "type": "registry:component",
+      "title": "Caustics",
+      "description": "Underwater light caustics: a coordinate folded back on itself several times, each pass accumulating reciprocal distance, then gamma-crushed so only the focus filaments survive. The pointer disturbs the water above.",
+      "category": "shader",
+      "tags": [
+        "shader",
+        "webgl",
+        "water",
+        "caustics",
+        "background"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-shader.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/caustics.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/caustics.tsx"
+        }
+      ]
+    },
+    {
+      "name": "halftone-gradient",
+      "type": "registry:component",
+      "title": "Halftone Gradient",
+      "description": "A drifting multi-stop gradient rendered through a print screen — either angled per-channel dots with radius proportional to the square root of tone, or a computed 4x4 ordered Bayer matrix. The screen opens up under the pointer.",
+      "category": "shader",
+      "tags": [
+        "shader",
+        "webgl",
+        "halftone",
+        "dither",
+        "print",
+        "background"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-shader.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/halftone-gradient.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/halftone-gradient.tsx"
+        }
+      ]
+    },
+    {
+      "name": "volumetric-rays",
+      "type": "registry:component",
+      "title": "Volumetric Rays",
+      "description": "God rays from a pointer-driven light source, integrated the classic way: march back toward the light sampling a drifting haze field and attenuating each step, with decay normalised by sample count so quality and brightness stay independent.",
+      "category": "shader",
+      "tags": [
+        "shader",
+        "webgl",
+        "light",
+        "rays",
+        "background"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-shader.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/volumetric-rays.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/volumetric-rays.tsx"
+        }
+      ]
+    },
+    {
+      "name": "curl-flow",
+      "type": "registry:component",
+      "title": "Curl Flow",
+      "description": "Silk-like flowing bands from a curl-noise field. FBM acts as a stream function and the velocity is the perpendicular of its gradient, so the field is divergence-free by construction; coordinates advect along it and shade as anisotropic streamlines. The pointer injects a vortex.",
+      "category": "shader",
+      "tags": [
+        "shader",
+        "webgl",
+        "curl-noise",
+        "flow",
+        "silk",
+        "background"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-shader.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/curl-flow.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/curl-flow.tsx"
+        }
+      ]
+    },
+    {
+      "name": "inertia-cursor",
+      "type": "registry:component",
+      "title": "Inertia Cursor",
+      "description": "Replaces the native cursor with an exact dot plus a ring that lags on a spring, growing over anything matching a selector. Hover is delegated from the document so late-mounted elements work, and difference blending keeps it visible on any background.",
+      "category": "cursor",
+      "tags": [
+        "cursor",
+        "pointer",
+        "spring",
+        "blend"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/inertia-cursor.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/inertia-cursor.tsx"
+        }
+      ]
+    },
+    {
+      "name": "elastic-cursor",
+      "type": "registry:component",
+      "title": "Elastic Cursor",
+      "description": "A gooey cursor that stretches along its own velocity vector and squashes perpendicular so its area is conserved exactly, rotating into the direction of travel and settling back to a circle at rest. Optional trailing blobs are welded together by an SVG goo filter.",
+      "category": "cursor",
+      "tags": [
+        "cursor",
+        "pointer",
+        "goo",
+        "elastic",
+        "svg"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/elastic-cursor.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/elastic-cursor.tsx"
+        }
+      ]
+    },
+    {
+      "name": "image-trail",
+      "type": "registry:component",
+      "title": "Image Trail",
+      "description": "Drops images along the pointer's path as it crosses a container, each fading and scaling out. Emission is thresholded by distance travelled rather than by event, with the remainder carried between events, so spacing stays even at any speed.",
+      "category": "cursor",
+      "tags": [
+        "cursor",
+        "pointer",
+        "trail",
+        "images",
+        "hover"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/image-trail.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/image-trail.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pixel-trail",
+      "type": "registry:component",
+      "title": "Pixel Trail",
+      "description": "A canvas grid whose cells ignite under the pointer and decay exponentially into a dissolving comet trail. The path between the previous and current position is walked at sub-cell steps, so a fast flick still lights a continuous line.",
+      "category": "cursor",
+      "tags": [
+        "cursor",
+        "pointer",
+        "canvas",
+        "pixels",
+        "trail"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/pixel-trail.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/pixel-trail.tsx"
+        }
+      ]
+    },
+    {
+      "name": "crosshair",
+      "type": "registry:component",
+      "title": "Crosshair",
+      "description": "A precision overlay: full-bleed hairlines, a centre reticle and a live monospace coordinate readout that snap to nearby targets. Distance is measured point-to-rectangle so hovering a target always locks, and one smoothstepped scalar drives the whole engage.",
+      "category": "cursor",
+      "tags": [
+        "cursor",
+        "pointer",
+        "crosshair",
+        "snapping",
+        "instrument"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/crosshair.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/crosshair.tsx"
+        }
+      ]
+    },
+    {
+      "name": "scroll-stack",
+      "type": "registry:component",
+      "title": "Scroll Stack",
+      "description": "Cards that stack into a deck as you scroll, pinned with native sticky positioning. Each card's depth is the running sum of how far the later cards have travelled, so the scale, dim and blur are continuous rather than stepped, and the front card always stays clean.",
+      "category": "scroll",
+      "tags": [
+        "scroll",
+        "sticky",
+        "cards",
+        "stack"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/scroll-stack.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/scroll-stack.tsx"
+        }
+      ]
+    },
+    {
+      "name": "scroll-velocity",
+      "type": "registry:component",
+      "title": "Scroll Velocity",
+      "description": "A seamless row that drifts at a base speed but is driven by scroll velocity, skewing as it lurches and easing back to baseline when you stop. Velocity is smoothed with a time-constant decay, so the feel is identical at 60Hz and 120Hz.",
+      "category": "scroll",
+      "tags": [
+        "scroll",
+        "velocity",
+        "marquee",
+        "skew"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/scroll-velocity.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/scroll-velocity.tsx"
+        }
+      ]
+    },
+    {
+      "name": "parallax-layers",
+      "type": "registry:component",
+      "title": "Parallax Layers",
+      "description": "Depth layers that drift at different rates as a section crosses the viewport, with optional scale and blur on distant layers. Progress is normalised against the section's own centre, so the composition is neutral exactly when the section is centred.",
+      "category": "scroll",
+      "tags": [
+        "scroll",
+        "parallax",
+        "depth",
+        "layers"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/parallax-layers.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/parallax-layers.tsx"
+        }
+      ]
+    },
+    {
+      "name": "scroll-scene",
+      "type": "registry:component",
+      "title": "Scroll Scene",
+      "description": "Pins a section and exposes its scrub progress from 0 to 1 through a render prop, plus a live CSS custom property and a per-frame callback. Travel is derived from the measured spacer and pinned heights, so there is no viewport constant to get wrong.",
+      "category": "scroll",
+      "tags": [
+        "scroll",
+        "pin",
+        "scrub",
+        "progress",
+        "render-prop"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/scroll-scene.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/scroll-scene.tsx"
+        }
+      ]
+    },
+    {
+      "name": "card-swap",
+      "type": "registry:component",
+      "title": "Card Swap",
+      "description": "A 3D deck where the front card peels away and the stack advances on an interval or on click. Every slot is a pure function of a card's distance from the front, so CSS transitions do all the interpolation; it pauses on hover and focus and announces changes politely.",
+      "category": "components",
+      "tags": [
+        "components",
+        "cards",
+        "3d",
+        "carousel"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/card-swap.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/card-swap.tsx"
+        }
+      ]
+    },
+    {
+      "name": "gooey-nav",
+      "type": "registry:component",
+      "title": "Gooey Nav",
+      "description": "A pill navigation whose liquid indicator stretches as it travels between items and settles into a single pill, fused by an SVG goo filter. Real buttons with roving tabindex and arrow-key movement; labels stay outside the filter so text remains crisp.",
+      "category": "components",
+      "tags": [
+        "components",
+        "nav",
+        "goo",
+        "svg",
+        "tabs"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/gooey-nav.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/gooey-nav.tsx"
+        }
+      ]
+    },
+    {
+      "name": "bento-grid",
+      "type": "registry:component",
+      "title": "Bento Grid",
+      "description": "A bento layout where the grid owns the only pointer listener and publishes shared coordinates as inherited custom properties, so the spotlight is pure CSS and continuous across gutters no matter how many tiles there are. Tiles add proximity glow and a subtle tilt.",
+      "category": "components",
+      "tags": [
+        "components",
+        "bento",
+        "grid",
+        "spotlight",
+        "tilt"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/bento-grid.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/bento-grid.tsx"
+        }
+      ]
+    },
+    {
+      "name": "elastic-slider",
+      "type": "registry:component",
+      "title": "Elastic Slider",
+      "description": "A slider whose rail stretches like rubber past either end with exponentially diminishing overshoot, then springs back on release. Implements the full slider ARIA contract with arrow, page, home and end keys, pointer capture and touch support.",
+      "category": "components",
+      "tags": [
+        "components",
+        "slider",
+        "input",
+        "elastic",
+        "a11y"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/elastic-slider.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/elastic-slider.tsx"
+        }
+      ]
+    },
+    {
+      "name": "circular-gallery",
+      "type": "registry:component",
+      "title": "Circular Gallery",
+      "description": "Items arranged around a horizontal cylinder that you drag to spin, with inertia on release and optional snapping to the nearest item. Drag is converted through arc length so tracking is one-to-one at any radius, and items past the horizon dim and stop taking pointer events.",
+      "category": "components",
+      "tags": [
+        "components",
+        "gallery",
+        "carousel",
+        "3d",
+        "drag"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-prefers-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/circular-gallery.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/circular-gallery.tsx"
         }
       ]
     }

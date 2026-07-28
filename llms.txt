@@ -1,6 +1,6 @@
 # ReactOmega
 
-> AI-native React component registry — premium, accessible, reduced-motion-safe motion & interaction components. v1.0.0. Install any component in one line via the ReactOmega CLI, shadcn, or an MCP server. Source of truth: /registry.json.
+> AI-native React component registry — premium, accessible, reduced-motion-safe motion & interaction components. v1.1.0. Install any component in one line via the ReactOmega CLI, shadcn, or an MCP server. Source of truth: /registry.json.
 
 ## Install a component
 ```
@@ -29,10 +29,26 @@ Every component is a self-contained file copied into your project (you own the c
 - `dot-grid` — An interactive dot field that lights up and swells around the pointer. A modern, non-cosmic backdrop.
 - `holographic-card` — An iridescent holo-foil card: a rainbow sheen and bright glare track the pointer with a color-dodge blend, over a subtle 3D tilt. Configurable tilt, intensity, and foil colors.
 
-## Components
-- `star-border` — Two soft glints travel continuously around the border of any element. Pure CSS.
-- `dock` — A macOS-style magnifying dock; items swell based on pointer distance. Renders as a toolbar.
-- `marquee` — A seamless infinite scroller (horizontal or vertical) with edge fade and pause-on-hover.
+## Cursor & Pointer
+- `inertia-cursor` — Replaces the native cursor with an exact dot plus a ring that lags on a spring, growing over anything matching a selector. Hover is delegated from the document so late-mounted elements work, and difference blending keeps it visible on any background.
+- `elastic-cursor` — A gooey cursor that stretches along its own velocity vector and squashes perpendicular so its area is conserved exactly, rotating into the direction of travel and settling back to a circle at rest. Optional trailing blobs are welded together by an SVG goo filter.
+- `image-trail` — Drops images along the pointer's path as it crosses a container, each fading and scaling out. Emission is thresholded by distance travelled rather than by event, with the remainder carried between events, so spacing stays even at any speed.
+- `pixel-trail` — A canvas grid whose cells ignite under the pointer and decay exponentially into a dissolving comet trail. The path between the previous and current position is walked at sub-cell steps, so a fast flick still lights a continuous line.
+- `crosshair` — A precision overlay: full-bleed hairlines, a centre reticle and a live monospace coordinate readout that snap to nearby targets. Distance is measured point-to-rectangle so hovering a target always locks, and one smoothstepped scalar drives the whole engage.
+
+## Scroll-Driven
+- `scroll-stack` — Cards that stack into a deck as you scroll, pinned with native sticky positioning. Each card's depth is the running sum of how far the later cards have travelled, so the scale, dim and blur are continuous rather than stepped, and the front card always stays clean.
+- `scroll-velocity` — A seamless row that drifts at a base speed but is driven by scroll velocity, skewing as it lurches and easing back to baseline when you stop. Velocity is smoothed with a time-constant decay, so the feel is identical at 60Hz and 120Hz.
+- `parallax-layers` — Depth layers that drift at different rates as a section crosses the viewport, with optional scale and blur on distant layers. Progress is normalised against the section's own centre, so the composition is neutral exactly when the section is centred.
+- `scroll-scene` — Pins a section and exposes its scrub progress from 0 to 1 through a render prop, plus a live CSS custom property and a per-frame callback. Travel is derived from the measured spacer and pinned heights, so there is no viewport constant to get wrong.
+
+## Shaders & Light (WebGL2)
+- `liquid-metal` — A molten chrome surface that flows, catches light and dents away from the pointer. Two rounds of domain-warped FBM drive a height field; the normal is taken from finite differences each frame and lit with diffuse, specular and swept polish bands.
+- `thin-film` — Iridescent soap-film sheen computed from real thin-film interference: phase is evaluated at three representative RGB wavelengths over a wobbling thickness field, so the fringe order is physical rather than a hue rotation. The pointer thins the film and shifts the bands.
+- `caustics` — Underwater light caustics: a coordinate folded back on itself several times, each pass accumulating reciprocal distance, then gamma-crushed so only the focus filaments survive. The pointer disturbs the water above.
+- `halftone-gradient` — A drifting multi-stop gradient rendered through a print screen — either angled per-channel dots with radius proportional to the square root of tone, or a computed 4x4 ordered Bayer matrix. The screen opens up under the pointer.
+- `volumetric-rays` — God rays from a pointer-driven light source, integrated the classic way: march back toward the light sampling a drifting haze field and attenuating each step, with decay normalised by sample count so quality and brightness stay independent.
+- `curl-flow` — Silk-like flowing bands from a curl-noise field. FBM acts as a stream function and the velocity is the perpendicular of its gradient, so the field is divergence-free by construction; coordinates advect along it and shade as anisotropic streamlines. The pointer injects a vortex.
 
 ## Physics & Art
 - `spring-mesh` — An elastic lattice: every node is sprung to rest and coupled to its neighbors, so pressing the pointer sends real waves rippling outward that settle naturally.
@@ -48,9 +64,20 @@ Every component is a self-contained file copied into your project (you own the c
 - `plucked-string` — A string pinned at both ends that you grab and pluck, then watch vibrate with a realistic decaying wave driven by neighbor-averaging physics.
 - `falling-sand` — A falling-sand cellular automaton where dragging the pointer pours colored grains that fall and slide diagonally into realistic piling mounds.
 
+## Components
+- `star-border` — Two soft glints travel continuously around the border of any element. Pure CSS.
+- `dock` — A macOS-style magnifying dock; items swell based on pointer distance. Renders as a toolbar.
+- `marquee` — A seamless infinite scroller (horizontal or vertical) with edge fade and pause-on-hover.
+- `card-swap` — A 3D deck where the front card peels away and the stack advances on an interval or on click. Every slot is a pure function of a card's distance from the front, so CSS transitions do all the interpolation; it pauses on hover and focus and announces changes politely.
+- `gooey-nav` — A pill navigation whose liquid indicator stretches as it travels between items and settles into a single pill, fused by an SVG goo filter. Real buttons with roving tabindex and arrow-key movement; labels stay outside the filter so text remains crisp.
+- `bento-grid` — A bento layout where the grid owns the only pointer listener and publishes shared coordinates as inherited custom properties, so the spotlight is pure CSS and continuous across gutters no matter how many tiles there are. Tiles add proximity glow and a subtle tilt.
+- `elastic-slider` — A slider whose rail stretches like rubber past either end with exponentially diminishing overshoot, then springs back on release. Implements the full slider ARIA contract with arrow, page, home and end keys, pointer capture and touch support.
+- `circular-gallery` — Items arranged around a horizontal cylinder that you drag to spin, with inertia on release and optional snapping to the nearest item. Drag is converted through arc length so tracking is one-to-one at any radius, and items past the horizon dim and stop taking pointer events.
+
 ## Primitives (added automatically as dependencies)
 - `utils` — Tailwind class merge helper used by every component.
 - `use-prefers-reduced-motion` — React hook that tracks the user's reduced-motion preference; motion components degrade gracefully when it is true.
+- `use-shader` — A dependency-free raw WebGL2 runtime for full-screen fragment shaders: DPR-clamped sizing, suspension while off-screen, context-loss recovery, eased pointer input, auto-generated uniform declarations, and a single still frame for reduced-motion users.
 
 ## Machine-readable & MCP
 - Registry index: [/registry.json](registry.json) — every component with deps + file targets.
