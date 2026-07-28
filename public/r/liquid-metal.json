@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "liquid-metal",
+  "type": "registry:component",
+  "title": "Liquid Metal",
+  "description": "A molten chrome surface that flows, catches light and dents away from the pointer. Two rounds of domain-warped FBM drive a height field; the normal is taken from finite differences each frame and lit with diffuse, specular and swept polish bands.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+    "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-shader.json"
+  ],
+  "files": [
+    {
+      "path": "components/reactomega/liquid-metal.tsx",
+      "type": "registry:component",
+      "target": "components/reactomega/liquid-metal.tsx",
+      "content": "\"use client\";\n\nimport { useMemo } from \"react\";\nimport { cn } from \"@/lib/utils\";\nimport { useShader, hexToRgb } from \"@/hooks/use-shader\";\n\nexport interface LiquidMetalProps {\n  className?: string;\n  /** Highlight tint of the polished surface. @default \"#c9d4ff\" */\n  tint?: string;\n  /** Colour in the troughs. @default \"#0a0b14\" */\n  shadow?: string;\n  /** Zoom of the flow pattern — higher is busier. @default 1.5 */\n  scale?: number;\n  /** Flow speed multiplier. @default 1 */\n  speed?: number;\n  /** Number of polish bands swept across the surface. @default 5 */\n  bands?: number;\n  /** How hard the pointer pushes into the metal, 0..1. @default 0.6 */\n  push?: number;\n}\n\n/**\n * LiquidMetal — a molten chrome surface that flows, catches light and dents\n * away from the pointer.\n *\n * The height field is two rounds of domain-warped value-noise FBM; the surface\n * normal is taken from finite differences of that field each frame, then lit\n * with a diffuse term, a tight specular, and a swept band pattern derived from\n * the normal — which is what reads as *polished* rather than merely bumpy.\n * Runs on raw WebGL2 with no dependencies, and settles into a single still\n * frame for reduced-motion users.\n */\nexport function LiquidMetal({\n  className,\n  tint = \"#c9d4ff\",\n  shadow = \"#0a0b14\",\n  scale = 1.5,\n  speed = 1,\n  bands = 5,\n  push = 0.6,\n}: LiquidMetalProps) {\n  const uniforms = useMemo(\n    () => ({\n      uTint: hexToRgb(tint),\n      uShadow: hexToRgb(shadow),\n      uScale: scale,\n      uBands: bands,\n      uPush: push,\n    }),\n    [tint, shadow, scale, bands, push],\n  );\n\n  const { ref, supported } = useShader({\n    speed,\n    uniforms,\n    fragment: FRAG,\n  });\n\n  if (!supported) {\n    return (\n      <div\n        className={cn(\"h-full w-full\", className)}\n        aria-hidden\n        style={{ background: `linear-gradient(135deg, ${shadow} 0%, ${tint} 48%, ${shadow} 100%)` }}\n      />\n    );\n  }\n\n  return <canvas ref={ref} className={cn(\"block h-full w-full\", className)} aria-hidden />;\n}\n\nconst FRAG = /* glsl */ `\nfloat hash(vec2 p) {\n  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);\n}\n\nfloat vnoise(vec2 p) {\n  vec2 i = floor(p);\n  vec2 f = fract(p);\n  vec2 u = f * f * (3.0 - 2.0 * f);\n  return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),\n             mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);\n}\n\nfloat fbm(vec2 p) {\n  float a = 0.5;\n  float v = 0.0;\n  for (int i = 0; i < 4; i++) {\n    v += a * vnoise(p);\n    p = mat2(1.6, 1.2, -1.2, 1.6) * p;\n    a *= 0.5;\n  }\n  return v;\n}\n\n// Two rounds of domain warping — the second warp is what gives the metal its\n// stretched, poured look instead of generic cloud noise.\nfloat field(vec2 p, float t) {\n  vec2 q = vec2(fbm(p + vec2(0.0, t * 0.20)), fbm(p + vec2(5.2, 1.3)));\n  vec2 r = vec2(fbm(p + 2.1 * q + vec2(1.7, 9.2) - t * 0.15),\n                fbm(p + 2.1 * q + vec2(8.3, 2.8) + t * 0.12));\n  return fbm(p + 1.7 * r);\n}\n\nvoid main() {\n  float m = min(uResolution.x, uResolution.y);\n  vec2 uv = (gl_FragCoord.xy - 0.5 * uResolution) / m;\n  vec2 pc = (uPointer.xy - 0.5 * uResolution) / m;\n\n  // Pointer dents the surface: push the sample point radially away from it.\n  vec2 away = uv - pc;\n  float d2 = dot(away, away);\n  float dent = uPointer.z * uPush * exp(-d2 * 7.0);\n  vec2 p = uv * uScale + normalize(away + 1e-5) * dent;\n\n  float t = uTime * 0.4;\n  // Wide finite-difference stencil on purpose: sampling the noise too tightly\n  // returns per-pixel normals, which read as grey static rather than poured metal.\n  float e = 0.030;\n  float h = field(p, t);\n  vec3 n = normalize(vec3(field(p + vec2(e, 0.0), t) - h, field(p + vec2(0.0, e), t) - h, 0.09));\n\n  vec3 L = normalize(vec3(0.45, 0.72, 0.62));\n  float diff = max(dot(n, L), 0.0);\n  float spec = pow(max(dot(reflect(-L, n), vec3(0.0, 0.0, 1.0)), 0.0), 42.0);\n\n  // Swept polish bands read off the normal, not the height — this is the\n  // difference between \"chrome\" and \"grey clouds\".\n  float sweep = 0.5 + 0.5 * sin(n.x * uBands * 1.1 + n.y * uBands * 0.8 + h * uBands * 0.7 - t * 0.9);\n  vec3 base = mix(uShadow, uTint, smoothstep(0.10, 0.95, sweep));\n\n  vec3 col = base * (0.30 + 0.90 * diff) + spec * 1.35;\n  col += (uPointer.z * 0.10) * exp(-d2 * 9.0) * uTint;\n\n  // Dither out 8-bit banding in the dark falloff.\n  col += (hash(gl_FragCoord.xy + t) - 0.5) * 0.012;\n  col *= 1.0 - 0.55 * dot(uv, uv);\n\n  fragColor = vec4(max(col, 0.0), 1.0);\n}\n`;\n"
+    }
+  ],
+  "meta": {
+    "category": "shader",
+    "tags": [
+      "shader",
+      "webgl",
+      "metal",
+      "background",
+      "pointer"
+    ]
+  }
+}

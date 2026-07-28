@@ -5,7 +5,7 @@
  * Copies a component (and its primitive dependencies) straight into your project,
  * shadcn-style: you own the code. Zero runtime dependencies (Node 18+ built-ins).
  *
- *   npx reactomega list [--category text|interaction|components]
+ *   npx reactomega list [--category text|interaction|cursor|scroll|shader|physics|components]
  *   npx reactomega add split-text magnetic [--cwd .] [--registry <url|dir>] [--dry]
  *
  * --registry defaults to the published registry on jsDelivr; pass a local path
@@ -62,7 +62,11 @@ async function cmdList() {
   const category = flag("category");
   const comps = reg.items.filter((i) => i.type === "registry:component" && (!category || i.category === category));
   console.log(color("bold", `\nReactOmega v${reg.version} — ${comps.length} components\n`));
-  const cats = ["text", "interaction", "components", "physics"];
+  // Preferred reading order, then anything else the registry knows about — a
+  // hardcoded list would silently hide whole categories as the registry grows.
+  const PREFERRED = ["text", "interaction", "cursor", "scroll", "shader", "physics", "components"];
+  const present = [...new Set(comps.map((i) => i.category))];
+  const cats = [...PREFERRED.filter((c) => present.includes(c)), ...present.filter((c) => !PREFERRED.includes(c))];
   for (const cat of cats) {
     const inCat = comps.filter((i) => i.category === cat);
     if (!inCat.length) continue;
@@ -119,7 +123,7 @@ async function cmdAdd() {
     else {
       console.log(`reactomega — copy premium React components into your project
 
-  reactomega list [--category text|interaction|components]
+  reactomega list [--category text|interaction|cursor|scroll|shader|physics|components]
   reactomega add <name...> [--cwd .] [--registry <url|dir>] [--dry]
 
 Registry: ${SRC}

@@ -101,7 +101,16 @@ writeFileSync(join(root, "registry.json"), JSON.stringify(registry, null, 2) + "
 // ----- llms.txt -----
 const byCat = {};
 for (const [n, c] of Object.entries(meta.components)) (byCat[c.category] ||= []).push([n, c]);
-const catTitle = { text: "Text Animations", interaction: "Interaction & Motion", components: "Components", physics: "Physics & Art" };
+const CATEGORY_ORDER = ["text", "interaction", "cursor", "scroll", "shader", "physics", "components"];
+const catTitle = {
+  text: "Text Animations",
+  interaction: "Interaction & Motion",
+  cursor: "Cursor & Pointer",
+  scroll: "Scroll-Driven",
+  shader: "Shaders & Light (WebGL2)",
+  physics: "Physics & Art",
+  components: "Components",
+};
 const lines = [];
 lines.push("# ReactOmega");
 lines.push("");
@@ -114,7 +123,7 @@ lines.push(`npx shadcn@latest add ${BASE}/<name>.json   # via shadcn`);
 lines.push("```");
 lines.push("Every component is a self-contained file copied into your project (you own the code). They use Tailwind + a tiny cn() helper, honor prefers-reduced-motion, and are screen-reader aware.");
 lines.push("");
-for (const cat of ["text", "interaction", "components", "physics"]) {
+for (const cat of CATEGORY_ORDER) {
   if (!byCat[cat]) continue;
   lines.push(`## ${catTitle[cat]}`);
   for (const [n, c] of byCat[cat]) lines.push(`- \`${n}\` — ${c.description}`);

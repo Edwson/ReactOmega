@@ -39,10 +39,31 @@ for (const name of compNames) {
 for (const name of primNames) ok(existsSync(join(root, `public/r/${name}.json`)), `primitive ${name} has a registry item`);
 
 console.log("accessibility contract (reduced-motion)");
+// A component satisfies the contract either directly, or transitively through a
+// primitive that does — useShader owns the whole WebGL lifecycle, including
+// rendering a single still frame instead of a loop, so the shaders that build on
+// it inherit the guarantee rather than restating it.
+const honorsDirectly = (src) => /prefers-reduced-motion/.test(src);
+const safePrimitives = new Set(primNames.filter((n) => honorsDirectly(read(meta.primitives[n].source))));
+ok(safePrimitives.has("use-prefers-reduced-motion"), "the reduced-motion primitive honors the contract");
 for (const name of compNames) {
   const src = read(`registry/reactomega/ui/${name}.tsx`);
-  const honored = /prefers-reduced-motion/.test(src) || /use-prefers-reduced-motion/.test(src);
-  ok(honored, `${name}: honors prefers-reduced-motion`);
+  const via = (meta.components[name].uses || []).filter((u) => safePrimitives.has(u));
+  const honored = honorsDirectly(src) || via.length > 0;
+  ok(honored, `${name}: honors prefers-reduced-motion${!honorsDirectly(src) && via.length ? ` (via ${via.join(", ")})` : ""}`);
+}
+
+console.log("WebGL lifecycle");
+// A canvas hands back the same context object on every getContext call, so calling
+// WEBGL_lose_context in an effect cleanup poisons every later mount on that canvas:
+// StrictMode re-runs effects in dev, and any dependency change re-runs them in prod.
+// The failure is invisible to the compiler, to `next build`, and to a first render —
+// it only shows up on the second mount, as a compile failure with a null info log.
+for (const [name, p] of Object.entries(meta.primitives)) {
+  ok(!/loseContext/.test(read(p.source)), `${name}: does not force-lose the WebGL context`);
+}
+for (const name of compNames) {
+  ok(!/loseContext/.test(read(`registry/reactomega/ui/${name}.tsx`)), `${name}: does not force-lose the WebGL context`);
 }
 
 console.log("llms.txt");

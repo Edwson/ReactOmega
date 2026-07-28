@@ -2,6 +2,56 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · [SemVer](https://semver.org/).
 
+## [1.1.0] — 2026-07-28 — "Surfaces"
+
+Twenty new components (31 → **51**) and a second primitive. The theme is surfaces you can
+touch: light on a material, the pointer itself, and the page as it scrolls.
+
+### Added
+- **`useShader()` primitive** — a raw **WebGL2** runtime for full-screen fragment shaders in
+  ~290 lines and **still zero runtime dependencies** (no `ogl`, no `three`). Draws a single
+  full-screen triangle from `gl_VertexID` (no buffers to allocate or leak) and owns the whole
+  lifecycle: DPR-clamped sizing via `ResizeObserver`, an `IntersectionObserver` that suspends the
+  loop off-screen, pause on tab blur, context-loss recovery, eased pointer input, uniform
+  declarations generated from the values you pass, and a single still frame for reduced-motion
+  users. Reports `supported: false` when WebGL2 is missing so components fall back to CSS
+  instead of a blank box.
+- **Shaders & Light (6)** — `liquid-metal` (domain-warped FBM height field, normals from finite
+  differences, swept polish bands), `thin-film` (two-beam interference evaluated at three
+  wavelengths — real fringe order, not a hue rotation), `caustics` (folded coordinates
+  accumulating reciprocal distance), `halftone-gradient` (angled per-channel dot screens with
+  √-corrected dot area, or a computed 4×4 Bayer matrix), `volumetric-rays` (radial scattering
+  integral with decay normalised by sample count), `curl-flow` (FBM as a stream function; the
+  velocity is the perpendicular of its gradient, so the field is divergence-free by construction).
+- **Cursor & Pointer (5)** — `inertia-cursor`, `elastic-cursor` (stretches along its velocity
+  vector with conserved area), `image-trail` (distance-thresholded emission, so spacing is even
+  at any speed), `pixel-trail` (sub-cell path walking, so a fast flick still lights a continuous
+  line), `crosshair` (point-to-rectangle snapping with a live coordinate readout).
+- **Scroll-Driven (4)** — `scroll-stack`, `scroll-velocity`, `parallax-layers`, `scroll-scene`
+  (pins a section and exposes scrub progress via render prop, a CSS custom property, and a
+  per-frame callback).
+- **Components (5)** — `card-swap`, `gooey-nav`, `bento-grid` (one pointer listener for the whole
+  grid, published to tiles as inherited custom properties), `elastic-slider` (exponentially damped
+  overshoot, full `role="slider"` keyboard contract), `circular-gallery` (drag converted through
+  arc length, so tracking is 1:1 at any radius).
+
+### Changed
+- `BentoGrid` gains a `rowHeight` prop; the row height was previously hardcoded at 140px, which
+  made the component unusable in any frame shorter than two rows.
+- The reduced-motion test is now **transitive**: a component satisfies the contract either
+  directly or through a primitive that does, so the shaders inherit the guarantee from
+  `useShader` rather than restating it.
+- The playground gives scroll-driven components a full-height section of their own — a 200px
+  preview tile can't demonstrate something driven by the page scroller.
+
+### Fixed
+- The CLI's `list` command iterated a hardcoded array of four categories, so components in any
+  newer category were silently omitted from its output. Both the CLI and the MCP server now derive
+  the category set from the registry.
+- The MCP integration test asserted a literal component count, which fails on every addition and
+  trains you to bump the number instead of reading the failure. Expected counts now come from
+  `registry/meta.json`.
+
 ## [1.0.0] — 2026-06-18 — "Re-architecture"
 
 A ground-up rebuild. ReactOmega is now an **AI-native React component registry** focused on
