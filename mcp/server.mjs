@@ -14,6 +14,9 @@ import { loadRegistry } from "./registry-core.mjs";
 
 const reg = loadRegistry();
 const VERSION = reg.version;
+// Derived from the registry, not written out by hand — adding a category to
+// meta.json must never require editing the MCP schema to match.
+const CATEGORIES = [...new Set(reg.listComponents({}).map((c) => c.category))].sort();
 
 const argv = process.argv.slice(2);
 if (argv.includes("--version") || argv.includes("-v")) {
@@ -40,7 +43,7 @@ server.registerTool(
     title: "List ReactOmega components",
     description: "List every component (name, title, category, description, tags). Optionally filter by category or a keyword query.",
     inputSchema: {
-      category: z.enum(["text", "interaction", "components", "physics"]).optional().describe("Restrict to one category."),
+      category: z.enum(CATEGORIES).optional().describe(`Restrict to one category: ${CATEGORIES.join(", ")}.`),
       query: z.string().optional().describe("Case-insensitive keyword across name/title/description/tags."),
     },
   },
