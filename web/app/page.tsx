@@ -12,12 +12,24 @@ import { VariableProximity } from "@/components/reactomega/variable-proximity";
 import { GravityText } from "@/components/reactomega/gravity-text";
 import { SpringMesh } from "@/components/reactomega/spring-mesh";
 import { Metaballs } from "@/components/reactomega/metaballs";
+import { LiquidMetal } from "@/components/reactomega/liquid-metal";
+import { ThinFilm } from "@/components/reactomega/thin-film";
+import { CurlFlow } from "@/components/reactomega/curl-flow";
+import { Caustics } from "@/components/reactomega/caustics";
+import { DEMOS } from "@/components/site/demos";
 
 const FEATURED = [
   { title: "variable-proximity", node: <div className="flex h-full w-full items-center justify-center"><VariableProximity text="Hover me" className="text-3xl font-extrabold" /></div> },
   { title: "gravity-text", node: <div className="flex h-full w-full items-center justify-center"><GravityText text="Let it fall" trigger="hover" className="text-2xl font-bold" /></div> },
+  { title: "liquid-metal", node: <LiquidMetal /> },
   { title: "spring-mesh", node: <SpringMesh /> },
   { title: "metaballs", node: <Metaballs /> },
+];
+
+const SHADERS = [
+  { title: "thin-film", blurb: "Real thin-film interference, not a hue rotation.", node: <ThinFilm /> },
+  { title: "curl-flow", blurb: "Divergence-free curl noise, advected into silk.", node: <CurlFlow /> },
+  { title: "caustics", blurb: "Folded coordinates focused into light filaments.", node: <Caustics /> },
 ];
 
 const WHY = [
@@ -41,7 +53,7 @@ export default function Home() {
         <div className="relative z-10 mx-auto max-w-3xl text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-neutral-300">
             <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
-            AI-native React registry · 31 components
+            AI-native React registry · {DEMOS.length} components
           </span>
 
           <h1 className="mt-7 select-none text-7xl font-black tracking-tight sm:text-8xl">
@@ -96,7 +108,7 @@ export default function Home() {
         <div className="mb-6 flex items-end justify-between">
           <h2 className="text-2xl font-bold">A few, live</h2>
           <Link href="/components" className="text-sm text-violet-400 hover:text-violet-300">
-            See all 31 →
+            See all {DEMOS.length} →
           </Link>
         </div>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -112,6 +124,36 @@ export default function Home() {
               </div>
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* shaders — the v1.1 headline, and the reason the zero-dependency claim is worth something */}
+      <section className="border-t border-white/10 bg-[#08080e]">
+        <div className="mx-auto max-w-6xl px-5 py-20">
+          <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="text-2xl font-bold">Shaders, without a shader library</h2>
+              <p className="mt-2 max-w-xl text-sm text-neutral-400">
+                Six full-screen fragment shaders on hand-written GLSL and raw WebGL2 — no ogl, no three, still zero
+                runtime dependencies. A shared <span className="font-mono text-neutral-300">useShader</span> primitive
+                owns sizing, off-screen suspension, context-loss recovery and the still frame reduced-motion users get.
+              </p>
+            </div>
+            <Link href="/components" className="shrink-0 text-sm text-violet-400 hover:text-violet-300">
+              All six →
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+            {SHADERS.map((sh) => (
+              <div key={sh.title} className="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950">
+                <InView className="relative h-56 w-full">{sh.node}</InView>
+                <div className="border-t border-white/10 px-4 py-3">
+                  <div className="font-mono text-xs text-neutral-300">{sh.title}</div>
+                  <p className="mt-1 text-xs leading-relaxed text-neutral-500">{sh.blurb}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
