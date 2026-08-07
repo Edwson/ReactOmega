@@ -38,6 +38,12 @@ import { Caustics } from "@/components/reactomega/caustics";
 import { HalftoneGradient } from "@/components/reactomega/halftone-gradient";
 import { VolumetricRays } from "@/components/reactomega/volumetric-rays";
 import { CurlFlow } from "@/components/reactomega/curl-flow";
+import { RefractedGlass } from "@/components/reactomega/refracted-glass";
+import { BrushedMetal } from "@/components/reactomega/brushed-metal";
+import { MoireWeave } from "@/components/reactomega/moire-weave";
+import { VelvetSheen } from "@/components/reactomega/velvet-sheen";
+import { TranslucentWax } from "@/components/reactomega/translucent-wax";
+import { DiffractionGrating } from "@/components/reactomega/diffraction-grating";
 import { InertiaCursor } from "@/components/reactomega/inertia-cursor";
 import { ElasticCursor } from "@/components/reactomega/elastic-cursor";
 import { ImageTrail } from "@/components/reactomega/image-trail";
@@ -164,6 +170,12 @@ export const DEMOS: Demo[] = [
   { name: "halftone-gradient", title: "Halftone Gradient", category: "shader", fill: true, node: <HalftoneGradient /> },
   { name: "volumetric-rays", title: "Volumetric Rays", category: "shader", fill: true, node: <VolumetricRays /> },
   { name: "curl-flow", title: "Curl Flow", category: "shader", fill: true, node: <CurlFlow /> },
+  { name: "refracted-glass", title: "Refracted Glass", category: "shader", fill: true, node: <RefractedGlass /> },
+  { name: "brushed-metal", title: "Brushed Metal", category: "shader", fill: true, node: <BrushedMetal /> },
+  { name: "moire-weave", title: "Moiré Weave", category: "shader", fill: true, node: <MoireWeave /> },
+  { name: "velvet-sheen", title: "Velvet Sheen", category: "shader", fill: true, node: <VelvetSheen /> },
+  { name: "translucent-wax", title: "Translucent Wax", category: "shader", fill: true, node: <TranslucentWax /> },
+  { name: "diffraction-grating", title: "Diffraction Grating", category: "shader", fill: true, node: <DiffractionGrating /> },
 
   // ---- cursor & pointer ----
   { name: "inertia-cursor", title: "Inertia Cursor", category: "cursor", fill: true, node: <HoverMount label="Hover — the cursor takes over"><InertiaCursor /></HoverMount> },

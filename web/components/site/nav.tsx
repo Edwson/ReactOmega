@@ -11,6 +11,9 @@ export function Nav() {
           <Link href="/components" className="transition-colors hover:text-white">
             Components
           </Link>
+          <Link href="/how-to-use" className="transition-colors hover:text-white">
+            How to use
+          </Link>
           <a
             href="https://github.com/Edwson/ReactOmega"
             target="_blank"
