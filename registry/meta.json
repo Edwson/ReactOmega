@@ -1,6 +1,6 @@
 {
   "$comment": "Single source of truth for the ReactOmega registry. scripts/build-registry.mjs reads this + the component source files to generate registry.json, public/r/*.json (shadcn-compatible), and llms.txt. 'uses' lists internal registry dependencies (primitives). 'dependencies' lists npm packages a consumer must install.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "primitives": {
     "utils": {
       "title": "cn() utility",
@@ -871,6 +871,114 @@
       "uses": [
         "utils",
         "use-prefers-reduced-motion"
+      ]
+    },
+    "refracted-glass": {
+      "title": "Refracted Glass",
+      "category": "shader",
+      "description": "A thick bevelled glass panel over a procedural backdrop. The view ray is refracted through the slab with a different index per RGB channel, so the bevel carries real chromatic dispersion, and a Schlick Fresnel term brightens the rim where the surface turns away.",
+      "tags": [
+        "shader",
+        "webgl",
+        "glass",
+        "refraction",
+        "dispersion",
+        "background"
+      ],
+      "dependencies": [],
+      "uses": [
+        "utils",
+        "use-shader"
+      ]
+    },
+    "brushed-metal": {
+      "title": "Brushed Metal",
+      "category": "shader",
+      "description": "Machined metal, still and precise \u2014 the opposite register to liquid-metal's flow. An anisotropic GGX lobe with Smith-correlated shadowing runs over a brush-direction field, so the highlight stretches perpendicular to the grain. Linear or radial (engine-turned) finishes.",
+      "tags": [
+        "shader",
+        "webgl",
+        "metal",
+        "anisotropic",
+        "specular",
+        "background"
+      ],
+      "dependencies": [],
+      "uses": [
+        "utils",
+        "use-shader"
+      ]
+    },
+    "moire-weave": {
+      "title": "Moir\u00e9 Weave",
+      "category": "shader",
+      "description": "Two rigid lattices at a small relative angle, beating against each other at their true difference frequency. Every cosine is band-limited by an exact box filter, so the pattern dissolves into its own mean grey as the period approaches two pixels instead of aliasing into noise.",
+      "tags": [
+        "shader",
+        "webgl",
+        "moire",
+        "interference",
+        "weave",
+        "background"
+      ],
+      "dependencies": [],
+      "uses": [
+        "utils",
+        "use-shader"
+      ]
+    },
+    "velvet-sheen": {
+      "title": "Velvet Sheen",
+      "category": "shader",
+      "description": "Soft fabric: an Ashikhmin velvet lobe gated by an inverted Fresnel, so the cloth is brightest at grazing angles and dark facing the viewer. Fibre rank modulates the sheen itself, and the drape comes from wandering the phase and amplitude of a gather train rather than adding noise to the height.",
+      "tags": [
+        "shader",
+        "webgl",
+        "fabric",
+        "velvet",
+        "sheen",
+        "background"
+      ],
+      "dependencies": [],
+      "uses": [
+        "utils",
+        "use-shader"
+      ]
+    },
+    "translucent-wax": {
+      "title": "Translucent Wax",
+      "category": "shader",
+      "description": "Light travelling through a solid rather than off it: a back-lit slab of banded stone. The interior light path is marched to accumulate thickness, attenuated by Beer\u2013Lambert with wrapped diffuse and a forward-scatter lobe, so the ground edge glows and the body goes deep.",
+      "tags": [
+        "shader",
+        "webgl",
+        "subsurface",
+        "stone",
+        "translucent",
+        "background"
+      ],
+      "dependencies": [],
+      "uses": [
+        "utils",
+        "use-shader"
+      ]
+    },
+    "diffraction-grating": {
+      "title": "Diffraction Grating",
+      "category": "shader",
+      "description": "The optics behind a CD surface: the grating equation places spectral orders by solving d\u00b7sin\u03b8 = m\u03bb for wavelength per order, giving sharp rainbow lines rather than broad fringes. Higher orders are dimmer and wash toward white, over a band-limited pressed ruling.",
+      "tags": [
+        "shader",
+        "webgl",
+        "diffraction",
+        "spectrum",
+        "iridescent",
+        "background"
+      ],
+      "dependencies": [],
+      "uses": [
+        "utils",
+        "use-shader"
       ]
     }
   }

@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "reactomega",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "homepage": "https://github.com/Edwson/ReactOmega",
   "base": "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r",
   "items": [
@@ -1348,6 +1348,168 @@
           "path": "components/reactomega/circular-gallery.tsx",
           "type": "registry:component",
           "target": "components/reactomega/circular-gallery.tsx"
+        }
+      ]
+    },
+    {
+      "name": "refracted-glass",
+      "type": "registry:component",
+      "title": "Refracted Glass",
+      "description": "A thick bevelled glass panel over a procedural backdrop. The view ray is refracted through the slab with a different index per RGB channel, so the bevel carries real chromatic dispersion, and a Schlick Fresnel term brightens the rim where the surface turns away.",
+      "category": "shader",
+      "tags": [
+        "shader",
+        "webgl",
+        "glass",
+        "refraction",
+        "dispersion",
+        "background"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-shader.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/refracted-glass.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/refracted-glass.tsx"
+        }
+      ]
+    },
+    {
+      "name": "brushed-metal",
+      "type": "registry:component",
+      "title": "Brushed Metal",
+      "description": "Machined metal, still and precise — the opposite register to liquid-metal's flow. An anisotropic GGX lobe with Smith-correlated shadowing runs over a brush-direction field, so the highlight stretches perpendicular to the grain. Linear or radial (engine-turned) finishes.",
+      "category": "shader",
+      "tags": [
+        "shader",
+        "webgl",
+        "metal",
+        "anisotropic",
+        "specular",
+        "background"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-shader.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/brushed-metal.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/brushed-metal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "moire-weave",
+      "type": "registry:component",
+      "title": "Moiré Weave",
+      "description": "Two rigid lattices at a small relative angle, beating against each other at their true difference frequency. Every cosine is band-limited by an exact box filter, so the pattern dissolves into its own mean grey as the period approaches two pixels instead of aliasing into noise.",
+      "category": "shader",
+      "tags": [
+        "shader",
+        "webgl",
+        "moire",
+        "interference",
+        "weave",
+        "background"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-shader.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/moire-weave.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/moire-weave.tsx"
+        }
+      ]
+    },
+    {
+      "name": "velvet-sheen",
+      "type": "registry:component",
+      "title": "Velvet Sheen",
+      "description": "Soft fabric: an Ashikhmin velvet lobe gated by an inverted Fresnel, so the cloth is brightest at grazing angles and dark facing the viewer. Fibre rank modulates the sheen itself, and the drape comes from wandering the phase and amplitude of a gather train rather than adding noise to the height.",
+      "category": "shader",
+      "tags": [
+        "shader",
+        "webgl",
+        "fabric",
+        "velvet",
+        "sheen",
+        "background"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-shader.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/velvet-sheen.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/velvet-sheen.tsx"
+        }
+      ]
+    },
+    {
+      "name": "translucent-wax",
+      "type": "registry:component",
+      "title": "Translucent Wax",
+      "description": "Light travelling through a solid rather than off it: a back-lit slab of banded stone. The interior light path is marched to accumulate thickness, attenuated by Beer–Lambert with wrapped diffuse and a forward-scatter lobe, so the ground edge glows and the body goes deep.",
+      "category": "shader",
+      "tags": [
+        "shader",
+        "webgl",
+        "subsurface",
+        "stone",
+        "translucent",
+        "background"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-shader.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/translucent-wax.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/translucent-wax.tsx"
+        }
+      ]
+    },
+    {
+      "name": "diffraction-grating",
+      "type": "registry:component",
+      "title": "Diffraction Grating",
+      "description": "The optics behind a CD surface: the grating equation places spectral orders by solving d·sinθ = mλ for wavelength per order, giving sharp rainbow lines rather than broad fringes. Higher orders are dimmer and wash toward white, over a band-limited pressed ruling.",
+      "category": "shader",
+      "tags": [
+        "shader",
+        "webgl",
+        "diffraction",
+        "spectrum",
+        "iridescent",
+        "background"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/utils.json",
+        "https://cdn.jsdelivr.net/gh/Edwson/ReactOmega@main/public/r/use-shader.json"
+      ],
+      "files": [
+        {
+          "path": "components/reactomega/diffraction-grating.tsx",
+          "type": "registry:component",
+          "target": "components/reactomega/diffraction-grating.tsx"
         }
       ]
     }

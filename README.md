@@ -4,7 +4,7 @@
 **motion & interaction** components you copy into your project — installable in one line by
 **humans _and_ AI agents**.
 
-![Version](https://img.shields.io/badge/version-1.1.0-7c5cff)
+![Version](https://img.shields.io/badge/version-1.2.0-7c5cff)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Deps](https://img.shields.io/badge/runtime%20deps-none-3c873a)
 ![A11y](https://img.shields.io/badge/reduced--motion-safe-22d3ee)
@@ -60,7 +60,7 @@ npx -y github:Edwson/ReactOmega list --category text  # filter by category
 
 ## Run the playground
 
-**Live:** **https://edwson.github.io/ReactOmega/** — every one of the 51 components rendered live,
+**Live:** **https://edwson.github.io/ReactOmega/** — every one of the 57 components rendered live,
 with a copy-paste install command on each card. The playground source lives in [`web/`](web)
 (Next.js + Tailwind). To run it locally:
 
@@ -70,7 +70,7 @@ npm install
 npm run dev        # → http://localhost:3000
 ```
 
-## Components (v1.1) — 51
+## Components (v1.2) — 57
 
 **Text Animations** (10) — novel + deeply customizable kinetic typography
 `split-text` · `shiny-text` · `gradient-text` · `count-up` · `variable-proximity` (per-letter
@@ -94,7 +94,7 @@ at any speed) · `pixel-trail` (sub-cell path walking — a fast flick still lig
 frame-rate independent) · `parallax-layers` (progress normalised to the section's own centre) ·
 `scroll-scene` (pins a section, exposes 0→1 scrub progress via render prop, CSS variable, or callback)
 
-**Shaders & Light** (6) — *new in 1.1* — **hand-written GLSL on raw WebGL2, still zero deps**
+**Shaders & Light** (12) — **hand-written GLSL on raw WebGL2, still zero deps**
 `liquid-metal` (domain-warped FBM, normals from finite differences, swept polish bands) ·
 `thin-film` (two-beam interference at three wavelengths — real fringe order, not a hue rotation) ·
 `caustics` (folded coordinates accumulating reciprocal distance) · `halftone-gradient` (angled
@@ -102,6 +102,16 @@ per-channel dot screens with √-corrected dot area, or a computed 4×4 Bayer ma
 `volumetric-rays` (radial scattering integral, decay normalised by sample count) · `curl-flow`
 (FBM as a stream function; velocity is the perpendicular of its gradient, so the field is
 divergence-free by construction)
+
+*New in 1.2 — a materials set, each a different optical family:* `refracted-glass` (per-channel
+IOR through a bevelled slab — real chromatic dispersion, Schlick Fresnel rim) · `brushed-metal`
+(anisotropic GGX with Smith shadowing; the highlight stretches perpendicular to the grain, linear
+or engine-turned) · `moire-weave` (two lattices beating at their true difference frequency,
+band-limited by an exact box filter so it dissolves rather than aliases) · `velvet-sheen`
+(Ashikhmin velvet lobe under an inverted Fresnel — brightest at grazing angles) ·
+`translucent-wax` (marched interior light path, Beer–Lambert through a back-lit slab of banded
+stone) · `diffraction-grating` (the grating equation solved per order, so spectral lines are sharp
+and higher orders wash toward white)
 
 **Physics & Art** (12) — real physics — tactile, designed, never cosmic
 `spring-mesh` (press an elastic lattice, waves ripple & settle) · `cloth` (a verlet fabric you grab

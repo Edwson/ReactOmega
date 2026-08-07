@@ -1,7 +1,7 @@
 # Deploy ReactOmega → https://edwson.com/ReactOmega/
 
-`ReactOmega-cpanel.zip` is a **fully static** build of the new ReactOmega playground
-(31 live components). No Node server, no database — it's plain HTML/CSS/JS that Apache
+`ReactOmega-cpanel.zip` is a **fully static** build of the ReactOmega playground
+(**51 live components**, v1.1.0 — including six raw-WebGL2 shaders). No Node server, no database — it's plain HTML/CSS/JS that Apache
 serves directly. The Inter font is **self-hosted inside the build**, so the page makes
 **zero external requests** at runtime.
 
@@ -42,7 +42,7 @@ _next/            ← hashed JS/CSS + self-hosted fonts
 
 - Open **https://edwson.com/ReactOmega/** → the ReactΩ landing page (Inter wordmark,
   "Motion · Interaction · Physics").
-- Open **https://edwson.com/ReactOmega/components/** → the live gallery, all 31 demos.
+- Open **https://edwson.com/ReactOmega/components/** → the live gallery, all 51 demos.
 - Hard-refresh once (**Cmd/Ctrl + Shift + R**) so the browser drops any cached old build.
 
 ---

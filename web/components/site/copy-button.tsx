@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-export function CopyButton({ text, label, className }: { text: string; label?: string; className?: string }) {
+/* `label` defaults to the copied text; pass null for a bare "copy" affordance
+ * when the surrounding chrome already names what is being copied. */
+export function CopyButton({ text, label, className }: { text: string; label?: string | null; className?: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <button
@@ -18,7 +20,7 @@ export function CopyButton({ text, label, className }: { text: string; label?: s
         className,
       )}
     >
-      <span className="truncate">{label ?? text}</span>
+      {label !== null && <span className="truncate">{label ?? text}</span>}
       <span className={cn("shrink-0", copied ? "text-emerald-400" : "text-violet-400")}>{copied ? "✓ copied" : "copy"}</span>
     </button>
   );
