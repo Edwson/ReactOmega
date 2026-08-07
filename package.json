@@ -1,6 +1,6 @@
 {
   "name": "reactomega",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "The AI-native React component registry \u2014 premium, accessible, reduced-motion-safe motion, interaction & physics components, installable by humans and AI agents via a CLI, shadcn, or an MCP server.",
   "keywords": [
     "react",
@@ -21,7 +21,9 @@
     "shader",
     "glsl",
     "cursor",
-    "scroll"
+    "scroll",
+    "materials",
+    "shaders"
   ],
   "license": "MIT",
   "author": "Ed Chen (https://www.edwson.com)",

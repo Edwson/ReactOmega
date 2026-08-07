@@ -2,6 +2,33 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · [SemVer](https://semver.org/).
 
+## [1.2.0] — 2026-08-07 — "Materials"
+
+Six more shaders (51 → **57**), taking **Shaders & Light from 6 to 12**. The set is now a
+materials library: every entry is a different optical family rather than another noise field.
+
+### Added
+- **`refracted-glass`** — a thick bevelled slab. The view ray is refracted with a separate index
+  per RGB channel (Cauchy-ordered, blue bent hardest), so the bevel carries genuine chromatic
+  dispersion; a Schlick Fresnel term lifts the rim and a Beer–Lambert body tint darkens with depth.
+- **`brushed-metal`** — anisotropic GGX with Smith-correlated shadowing over a brush-direction
+  field: roughness stays low along the grain and is pushed hard across it, so the highlight
+  stretches perpendicular to the brushing. `pattern: "linear" | "radial"` for engine-turned.
+- **`moire-weave`** — two rigid lattices whose beat is the actual difference frequency. Every
+  cosine is band-limited by an exact box filter (`sinc(w)`, `w = fwidth(φ)` in cycles per pixel),
+  so amplitude reaches zero at a two-pixel period and the pattern dissolves into its own mean
+  instead of boiling.
+- **`velvet-sheen`** — an Ashikhmin velvet lobe gated by an inverted Fresnel, so the cloth is
+  brightest at grazing angles and dark facing the viewer. Drape comes from wandering the phase and
+  amplitude of a gather train; adding noise to the height read as stone, not cloth.
+- **`translucent-wax`** — light through a solid: the interior light path is marched to accumulate
+  thickness, then attenuated by Beer–Lambert with wrapped diffuse and a forward-scatter lobe. The
+  ground edge glows and the body goes deep, which is the cue that sells the translucency.
+- **`diffraction-grating`** — the grating equation solved for wavelength per order
+  (`d·sinθ = mλ`) rather than integrated over sampled wavelengths, which is what keeps the spectral
+  lines continuous instead of beading. Blaze falloff dims higher orders and `sharpness` acts as
+  resolving power, so they wash toward white rather than simply fading.
+
 ## [1.1.0] — 2026-07-28 — "Surfaces"
 
 Twenty new components (31 → **51**) and a second primitive. The theme is surfaces you can

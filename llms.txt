@@ -1,6 +1,6 @@
 # ReactOmega
 
-> AI-native React component registry — premium, accessible, reduced-motion-safe motion & interaction components. v1.1.0. Install any component in one line via the ReactOmega CLI, shadcn, or an MCP server. Source of truth: /registry.json.
+> AI-native React component registry — premium, accessible, reduced-motion-safe motion & interaction components. v1.2.0. Install any component in one line via the ReactOmega CLI, shadcn, or an MCP server. Source of truth: /registry.json.
 
 ## Install a component
 ```
@@ -49,6 +49,12 @@ Every component is a self-contained file copied into your project (you own the c
 - `halftone-gradient` — A drifting multi-stop gradient rendered through a print screen — either angled per-channel dots with radius proportional to the square root of tone, or a computed 4x4 ordered Bayer matrix. The screen opens up under the pointer.
 - `volumetric-rays` — God rays from a pointer-driven light source, integrated the classic way: march back toward the light sampling a drifting haze field and attenuating each step, with decay normalised by sample count so quality and brightness stay independent.
 - `curl-flow` — Silk-like flowing bands from a curl-noise field. FBM acts as a stream function and the velocity is the perpendicular of its gradient, so the field is divergence-free by construction; coordinates advect along it and shade as anisotropic streamlines. The pointer injects a vortex.
+- `refracted-glass` — A thick bevelled glass panel over a procedural backdrop. The view ray is refracted through the slab with a different index per RGB channel, so the bevel carries real chromatic dispersion, and a Schlick Fresnel term brightens the rim where the surface turns away.
+- `brushed-metal` — Machined metal, still and precise — the opposite register to liquid-metal's flow. An anisotropic GGX lobe with Smith-correlated shadowing runs over a brush-direction field, so the highlight stretches perpendicular to the grain. Linear or radial (engine-turned) finishes.
+- `moire-weave` — Two rigid lattices at a small relative angle, beating against each other at their true difference frequency. Every cosine is band-limited by an exact box filter, so the pattern dissolves into its own mean grey as the period approaches two pixels instead of aliasing into noise.
+- `velvet-sheen` — Soft fabric: an Ashikhmin velvet lobe gated by an inverted Fresnel, so the cloth is brightest at grazing angles and dark facing the viewer. Fibre rank modulates the sheen itself, and the drape comes from wandering the phase and amplitude of a gather train rather than adding noise to the height.
+- `translucent-wax` — Light travelling through a solid rather than off it: a back-lit slab of banded stone. The interior light path is marched to accumulate thickness, attenuated by Beer–Lambert with wrapped diffuse and a forward-scatter lobe, so the ground edge glows and the body goes deep.
+- `diffraction-grating` — The optics behind a CD surface: the grating equation places spectral orders by solving d·sinθ = mλ for wavelength per order, giving sharp rainbow lines rather than broad fringes. Higher orders are dimmer and wash toward white, over a band-limited pressed ruling.
 
 ## Physics & Art
 - `spring-mesh` — An elastic lattice: every node is sprung to rest and coupled to its neighbors, so pressing the pointer sends real waves rippling outward that settle naturally.
